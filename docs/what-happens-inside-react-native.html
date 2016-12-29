@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+  <head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  <!-- Enable responsiveness on mobile devices-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <!-- GA -->
+<script>
+  var ga_apt = '39805-1';
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-732' + ga_apt, 'auto');
+  ga('send', 'pageview');
+</script>
+
+  <title>
+    
+      What happens inside React Native &middot; Apentle
+    
+  </title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/public/style.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Serif:400,400italic,700%7CPT+Sans:400">
+
+  <!-- Icons -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/public/apple-touch-icon-precomposed.png">
+
+  <!-- RSS -->
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="/feed.xml">
+</head>
+
+
+  <body class="theme-base-10">
+
+    <!-- Target for toggling the sidebar `.sidebar-checkbox` is for regular
+     styles, `#sidebar-checkbox` for behavior. -->
+<input type="checkbox" class="sidebar-checkbox" id="sidebar-checkbox">
+
+<!-- Toggleable sidebar -->
+<div class="sidebar" id="sidebar">
+  <div class="sidebar-item">
+    <p><a href="/" title="Apentle"><img src="/public/images/logo-i.png" srcset="/public/images/logo-i@2x.png 2x" alt="{{ site.name }}"></a></p>
+  </div>
+
+  <nav class="sidebar-nav">
+    <a class="sidebar-nav-item" href="/">Home</a>
+
+    
+
+    
+    
+      
+        
+      
+    
+      
+        
+      
+    
+      
+        
+          <a class="sidebar-nav-item" href="/about">About</a>
+        
+      
+    
+      
+    
+      
+        
+      
+    
+
+    <a class="sidebar-nav-item" href="https://www.facebook.com/apentle">Facebook</a>
+    <a class="sidebar-nav-item" href="https://twitter.com/apentle">Twitter</a>
+    <a class="sidebar-nav-item" href="https://github.com/apentle">GitHub</a>
+    <a class="sidebar-nav-item" href="/feed.xml">RSS</a>
+  </nav>
+
+  <div class="sidebar-item">
+    <p>
+      &copy; 2016 Apentle. All rights reserved.
+    </p>
+  </div>
+</div>
+
+
+    <!-- Wrap is the content to shift when toggling the sidebar. We wrap the
+         content to avoid any CSS collisions with our real content. -->
+    <div class="wrap">
+      <div class="masthead">
+        <div class="container">
+          <h3 class="masthead-title">
+            <a href="/" title="Home">Apentle</a>
+            <small>React native hints and tips</small>
+          </h3>
+        </div>
+      </div>
+
+      <div class="container content">
+        <div class="post">
+  <h1 class="post-title">What happens inside React Native</h1>
+  <span class="post-date">30 Mar 2016</span>
+  <p><img src="/public/2016/03/inside-react-native.jpg" alt="What happens inside React Native" /></p>
+
+<p>In the <a href="/getting-started-react-native/">previous post</a>, we built “Hello World” app and learned some JavaScript code using React Native platform. But what happens in the low level code, in your native project? This tutorial will take a look into it.</p>
+
+<h2>Work with JavaScript Server</h2>
+<p>React Native allows you to debug your JavaScript code instantly when you make a change without rebuild your app. Because it provides two ways to load JavaScript code. The fist one, it loads from an external server. So you can change your code and then tell React Native to reload it. The second one is from app’s bundle. This option is usually used for production version. Look at the file <strong>AppDelegate.m</strong> in your iOS project, you will see some lines of code like this.</p>
+
+<figure class="highlight"><pre><code class="language-objc" data-lang="objc"><span class="n">NSURL</span> <span class="o">*</span><span class="n">jsCodeLocation</span><span class="p">;</span>
+
+<span class="cm">/**
+ - Loading JavaScript code - uncomment the one you want.
+ *
+ - OPTION 1
+ - Load from development server. Start the server from the repository root:
+ *
+ - $ npm start
+ *
+ - To run on device, change `localhost` to the IP address of your computer
+ - (you can get this by typing `ifconfig` into the terminal and selecting the
+ - `inet` value under `en0:`) and make sure your computer and iOS device are
+ - on the same Wi-Fi network.
+ */</span>
+
+<span class="n">jsCodeLocation</span> <span class="o">=</span> <span class="p">[</span><span class="n">NSURL</span> <span class="nf">URLWithString</span><span class="p">:</span><span class="s">@"http://localhost:8081/index.ios.bundle?platform=ios&amp;dev=true"</span><span class="p">];</span>
+
+<span class="cm">/**
+ - OPTION 2
+ - Load from pre-bundled file on disk. The static bundle is automatically
+ - generated by "Bundle React Native code and images" build step.
+ */</span>
+
+<span class="c1">// jsCodeLocation = [[NSBundle mainBundle] URLForResource:@"main" withExtension:@"jsbundle"];
+</span>
+<span class="n">RCTRootView</span> <span class="o">*</span><span class="n">rootView</span> <span class="o">=</span> <span class="p">[[</span><span class="n">RCTRootView</span> <span class="nf">alloc</span><span class="p">]</span> <span class="nf">initWithBundleURL</span><span class="p">:</span><span class="n">jsCodeLocation</span>
+                                                    <span class="nf">moduleName</span><span class="p">:</span><span class="s">@"HelloWorld"</span>
+                                             <span class="n">initialProperties</span><span class="o">:</span><span class="nb">nil</span>
+                                                 <span class="n">launchOptions</span><span class="o">:</span><span class="n">launchOptions</span><span class="p">];</span>
+
+<span class="n">self</span><span class="p">.</span><span class="n">window</span> <span class="o">=</span> <span class="p">[[</span><span class="n">UIWindow</span> <span class="nf">alloc</span><span class="p">]</span> <span class="nf">initWithFrame</span><span class="p">:[</span><span class="n">UIScreen</span> <span class="nf">mainScreen</span><span class="p">].</span><span class="n">bounds</span><span class="p">];</span>
+<span class="n">UIViewController</span> <span class="o">*</span><span class="n">rootViewController</span> <span class="o">=</span> <span class="p">[</span><span class="n">UIViewController</span> <span class="nf">new</span><span class="p">];</span>
+<span class="n">rootViewController</span><span class="p">.</span><span class="n">view</span> <span class="o">=</span> <span class="n">rootView</span><span class="p">;</span>
+<span class="n">self</span><span class="p">.</span><span class="n">window</span><span class="p">.</span><span class="n">rootViewController</span> <span class="o">=</span> <span class="n">rootViewController</span><span class="p">;</span>
+<span class="p">[</span><span class="n">self</span><span class="p">.</span><span class="n">window</span> <span class="nf">makeKeyAndVisible</span><span class="p">];</span>
+<span class="k">return</span> <span class="nb">YES</span><span class="p">;</span></code></pre></figure>
+
+<p>Before release your app, make sure you are using JavaScript from app’s resource. It’s very important!</p>
+
+<h2>React Native connects JavaScript and Native Code</h2>
+<p>Look deeper inside the code of React Native, we will learn how to make a native component works on JavaScript environment. The easiest way is to look into an React Native component. We have two Objective-C files.</p>
+
+<figure class="highlight"><pre><code class="language-objc" data-lang="objc"><span class="cp">#import "RCTBridgeModule.h"
+</span>
+<span class="k">@interface</span> <span class="nc">RCTVibration</span> <span class="p">:</span> <span class="nc">NSObject</span> <span class="o">&lt;</span><span class="n">RCTBridgeModule</span><span class="o">&gt;</span>
+<span class="k">@end</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-objc" data-lang="objc"><span class="cp">#import "RCTVibration.h"
+#import &lt;AudioToolbox/AudioToolbox.h&gt;
+</span>
+<span class="k">@implementation</span> <span class="nc">RCTVibration</span>
+
+<span class="n">RCT_EXPORT_MODULE</span><span class="p">()</span>
+
+<span class="n">RCT_EXPORT_METHOD</span><span class="p">(</span><span class="n">vibrate</span><span class="p">)</span>
+<span class="p">{</span>
+  <span class="n">AudioServicesPlaySystemSound</span><span class="p">(</span><span class="n">kSystemSoundID_Vibrate</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="k">@end</span></code></pre></figure>
+
+<p>We can see two macros in here. <strong>RCT_EXPORT_MODULE</strong> will export your class to React Native module. And <strong>RCT_EXPORT_METHOD</strong> will export your method to React Native method. Then we can use it on JavaScript file.</p>
+
+<figure class="highlight"><pre><code class="language-js" data-lang="js"><span class="s1">'use strict'</span><span class="p">;</span>
+<span class="kr">import</span> <span class="nx">React</span><span class="p">,</span> <span class="p">{</span>
+  <span class="p">...</span>
+  <span class="nx">NativeModules</span><span class="p">,</span>
+<span class="p">}</span> <span class="nx">from</span> <span class="s1">'react-native'</span><span class="p">;</span>
+
+<span class="kr">class</span> <span class="nx">HelloWorld</span> <span class="kr">extends</span> <span class="nx">Component</span> <span class="p">{</span>
+  <span class="nx">render</span><span class="p">()</span> <span class="p">{</span>
+    <span class="c1">// Vibrate on render
+</span>
+    <span class="nx">NativeModules</span><span class="p">.</span><span class="nx">Vibration</span><span class="p">.</span><span class="nx">vibrate</span><span class="p">();</span>
+    <span class="k">return</span> <span class="p">(</span>
+      <span class="p">...</span>
+    <span class="p">);</span>
+  <span class="p">}</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>Press Cmd+R while running your app in Simulator or shake your phone and select “Reload” menu. Then you can see the result.</p>
+
+<h2>JavaScriptCore</h2>
+<p>In this section, I will introduce about a library that makes RCT_EXPORT_MODULE, RCT_EXPORT_METHOD macros work. It’s <a href="https://developer.apple.com/library/ios/documentation/Carbon/Reference/WebKit_JavaScriptCore_Ref/index.html" target="_blank">JavaScriptCore</a> by Apple. It helps us to answer two questions (1)How to run JavaScript in native code? and (2)How to export native code to use in JavaScript?
+With the first question, we will look at two classes: <strong>JSContext</strong> and <strong>JSValue</strong>. JSContext is a JavaScript execution environment, you use a JSContext object to evaluate JavaScript scripts. JSValue is a reference to a JavaScript value, you use a JSValue object to convert value between JavaScript and Objective-C. For example.</p>
+
+<figure class="highlight"><pre><code class="language-objc" data-lang="objc"><span class="n">JSContext</span> <span class="o">*</span><span class="n">context</span> <span class="o">=</span> <span class="p">[[</span><span class="n">JSContext</span> <span class="nf">alloc</span><span class="p">]</span> <span class="nf">init</span><span class="p">];</span>
+<span class="p">[</span><span class="n">context</span> <span class="nf">evaluateScript</span><span class="p">:</span><span class="s">@"var square = function(x) { return x * x }"</span><span class="p">];</span>
+<span class="n">JSValue</span> <span class="o">*</span><span class="n">square</span> <span class="o">=</span> <span class="p">[</span><span class="n">context</span> <span class="nf">evaluateScript</span><span class="p">:</span><span class="s">@"square(10)"</span><span class="p">];</span>
+<span class="n">NSLog</span><span class="p">(</span><span class="s">@"Ten squared: %@"</span><span class="p">,</span> <span class="p">[</span><span class="n">square</span> <span class="nf">toNumber</span><span class="p">]);</span>
+<span class="n">NSLog</span><span class="p">(</span><span class="s">@"String: %@"</span><span class="p">,</span> <span class="p">[</span><span class="n">square</span> <span class="nf">toString</span><span class="p">]);</span></code></pre></figure>
+
+<p>With the second question, we use an Objective-C block to export method for JavaScript. Yes, we will call a native method from JavaScript.</p>
+
+<figure class="highlight"><pre><code class="language-objc" data-lang="objc"><span class="n">context</span><span class="p">[</span><span class="s">@"fullName"</span><span class="p">]</span> <span class="o">=</span> <span class="o">^</span><span class="p">(</span><span class="n">NSString</span> <span class="o">*</span><span class="n">firstName</span><span class="p">,</span> <span class="n">NSString</span> <span class="o">*</span><span class="n">lastName</span><span class="p">){</span>
+  <span class="k">return</span> <span class="p">[</span><span class="n">NSString</span> <span class="nf">stringWithFormat</span><span class="p">:</span><span class="s">@"%@ %@"</span><span class="p">,</span> <span class="n">firstName</span><span class="p">,</span> <span class="n">lastName</span><span class="p">];</span>
+<span class="p">};</span>
+<span class="n">NSLog</span><span class="p">(</span><span class="s">@"My full name: %@"</span><span class="p">,</span> <span class="p">[</span><span class="n">context</span> <span class="nf">evaluateScript</span><span class="p">:</span><span class="s">@"fullName('Doan', 'Nguyen')"</span><span class="p">]);</span></code></pre></figure>
+
+<p>These are very simple codes to make us figure out how React Native works.</p>
+
+<h2>Conclusion</h2>
+<p>Because React Native is an open source framework, we can learn many things from it with source code :). When we use it to build an app, we can use only JavaScript code with many libraries or mix the native and JavaScript code for better performance. Is it a good deal? Let think about it.</p>
+
+</div>
+
+<div class="related">
+  <h2>Related Posts</h2>
+  <ul class="related-posts">
+    
+      <li>
+        <h3>
+          <a href="/manage-react-native-theme">
+            Manage React Native Theme
+            <small>04 Jul 2016</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/two-helpful-testing-tools-react-native">
+            Two helpful testing tools for React Native
+            <small>25 May 2016</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/react-native-testing-component-action">
+            React Native Testing: Function, Component and Action
+            <small>04 May 2016</small>
+          </a>
+        </h3>
+      </li>
+    
+  </ul>
+</div>
+
+<div class="related">
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.8&appId=131640303894504";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+<div class="fb-comments" data-href="http://www.apentle.com/what-happens-inside-react-native" data-numposts="5"></div>
+</div>
+
+      </div>
+    </div>
+
+    <label for="sidebar-checkbox" class="sidebar-toggle"></label>
+
+    <script>
+      (function(document) {
+        var toggle = document.querySelector('.sidebar-toggle');
+        var sidebar = document.querySelector('#sidebar');
+        var checkbox = document.querySelector('#sidebar-checkbox');
+
+        document.addEventListener('click', function(e) {
+          var target = e.target;
+
+          if(!checkbox.checked ||
+             sidebar.contains(target) ||
+             (target === checkbox || target === toggle)) return;
+
+          checkbox.checked = false;
+        }, false);
+      })(document);
+    </script>
+  </body>
+</html>

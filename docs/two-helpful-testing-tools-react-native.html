@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+  <head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  <!-- Enable responsiveness on mobile devices-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <!-- GA -->
+<script>
+  var ga_apt = '39805-1';
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-732' + ga_apt, 'auto');
+  ga('send', 'pageview');
+</script>
+
+  <title>
+    
+      Two helpful testing tools for React Native &middot; Apentle
+    
+  </title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/public/style.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Serif:400,400italic,700%7CPT+Sans:400">
+
+  <!-- Icons -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/public/apple-touch-icon-precomposed.png">
+
+  <!-- RSS -->
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="/feed.xml">
+</head>
+
+
+  <body class="theme-base-10">
+
+    <!-- Target for toggling the sidebar `.sidebar-checkbox` is for regular
+     styles, `#sidebar-checkbox` for behavior. -->
+<input type="checkbox" class="sidebar-checkbox" id="sidebar-checkbox">
+
+<!-- Toggleable sidebar -->
+<div class="sidebar" id="sidebar">
+  <div class="sidebar-item">
+    <p><a href="/" title="Apentle"><img src="/public/images/logo-i.png" srcset="/public/images/logo-i@2x.png 2x" alt="{{ site.name }}"></a></p>
+  </div>
+
+  <nav class="sidebar-nav">
+    <a class="sidebar-nav-item" href="/">Home</a>
+
+    
+
+    
+    
+      
+        
+      
+    
+      
+        
+      
+    
+      
+        
+          <a class="sidebar-nav-item" href="/about">About</a>
+        
+      
+    
+      
+    
+      
+        
+      
+    
+
+    <a class="sidebar-nav-item" href="https://www.facebook.com/apentle">Facebook</a>
+    <a class="sidebar-nav-item" href="https://twitter.com/apentle">Twitter</a>
+    <a class="sidebar-nav-item" href="https://github.com/apentle">GitHub</a>
+    <a class="sidebar-nav-item" href="/feed.xml">RSS</a>
+  </nav>
+
+  <div class="sidebar-item">
+    <p>
+      &copy; 2016 Apentle. All rights reserved.
+    </p>
+  </div>
+</div>
+
+
+    <!-- Wrap is the content to shift when toggling the sidebar. We wrap the
+         content to avoid any CSS collisions with our real content. -->
+    <div class="wrap">
+      <div class="masthead">
+        <div class="container">
+          <h3 class="masthead-title">
+            <a href="/" title="Home">Apentle</a>
+            <small>React native hints and tips</small>
+          </h3>
+        </div>
+      </div>
+
+      <div class="container content">
+        <div class="post">
+  <h1 class="post-title">Two helpful testing tools for React Native</h1>
+  <span class="post-date">25 May 2016</span>
+  <p><img src="/public/2016/05/testing-tools.jpg" alt="Two helpful testing tools for React Native" /></p>
+
+<p>In the <a href="/react-native-testing-component-action/">previous post</a>, we introduced how to make a test for component in react native. Today, we introduce two tools to help you write testing code much easier. <a href="https://github.com/apentle/react-native-babel-jest" target="_blank">react-native-babel-jest</a> help you to configure testing enviroment quickly and <a href="http://airbnb.io/enzyme/" target="_blank">enzyme</a> help you traverse your React Native Components’ output easier.</p>
+
+<h2>
+  <a class="anchor" name="react-native-babel-jest"></a> react-native-babel-jest <a class="hash-link" href="#react-native-babel-jest">#</a>
+</h2>
+<p><a href="https://github.com/apentle/react-native-babel-jest" target="_blank">react-native-babel-jest</a> help you to configure testing enviroment quickly. First, install it to your project by command</p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell">npm i --save-dev react-native-babel-jest</code></pre></figure>
+
+<p>Add the code below to your <strong>package.json</strong> file</p>
+
+<figure class="highlight"><pre><code class="language-js" data-lang="js"><span class="p">{</span>
+  <span class="s2">"scripts"</span><span class="err">:</span> <span class="p">{</span>
+    <span class="s2">"test"</span><span class="err">:</span> <span class="s2">"jest"</span>
+  <span class="p">},</span>
+  <span class="p">...</span>
+  <span class="s2">"jest"</span><span class="err">:</span> <span class="p">{</span>
+    <span class="s2">"scriptPreprocessor"</span><span class="err">:</span> <span class="s2">"&lt;rootDir&gt;/node_modules/react-native-babel-jest"</span><span class="p">,</span>
+    <span class="s2">"setupEnvScriptFile"</span><span class="err">:</span> <span class="s2">"&lt;rootDir&gt;/node_modules/react-native-babel-jest/env.js"</span><span class="p">,</span>
+    <span class="s2">"testPathIgnorePatterns"</span><span class="err">:</span> <span class="p">[</span>
+      <span class="s2">"/node_modules/"</span>
+    <span class="p">],</span>
+    <span class="s2">"testFileExtensions"</span><span class="err">:</span> <span class="p">[</span>
+      <span class="s2">"js"</span>
+    <span class="p">],</span>
+    <span class="s2">"unmockedModulePathPatterns"</span><span class="err">:</span> <span class="p">[</span>
+      <span class="s2">"react"</span><span class="p">,</span>
+      <span class="s2">"promise"</span><span class="p">,</span>
+      <span class="s2">"source-map"</span>
+    <span class="p">]</span>
+  <span class="p">}</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>The most important things on these code are <strong>scriptPreprocessor</strong> and <strong>setupEnvScriptFile</strong>. It will help you to setup testing enviroment. It includes react-native-mocking object, so you don’t need to mock it manually. Good sound!
+Let’s write a component <strong>ShowComponent.js</strong> like this</p>
+
+<figure class="highlight"><pre><code class="language-js" data-lang="js"><span class="s1">'use strict'</span><span class="p">;</span>
+
+<span class="kr">import</span> <span class="nx">React</span><span class="p">,</span> <span class="p">{</span>
+  <span class="nx">Component</span><span class="p">,</span>
+  <span class="nx">StyleSheet</span><span class="p">,</span>
+  <span class="nx">Text</span><span class="p">,</span>
+  <span class="nx">View</span><span class="p">,</span>
+<span class="p">}</span> <span class="nx">from</span> <span class="s1">'react-native'</span><span class="p">;</span>
+
+<span class="kr">class</span> <span class="nx">ShowComponent</span> <span class="kr">extends</span> <span class="nx">Component</span> <span class="p">{</span>
+  <span class="nx">render</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="p">(</span>
+      <span class="o">&lt;</span><span class="nx">View</span> <span class="nx">style</span><span class="o">=</span><span class="p">{</span><span class="nx">styles</span><span class="p">.</span><span class="nx">container</span><span class="p">}</span><span class="o">&gt;</span>
+        <span class="o">&lt;</span><span class="nx">Text</span> <span class="nx">style</span><span class="o">=</span><span class="p">{</span><span class="nx">styles</span><span class="p">.</span><span class="nx">show</span><span class="p">}</span><span class="o">&gt;</span>
+          <span class="nx">Show</span> <span class="nx">Text</span>
+        <span class="o">&lt;</span><span class="sr">/Text&gt;</span><span class="err">
+</span>      <span class="o">&lt;</span><span class="sr">/View&gt;</span><span class="err">
+</span>    <span class="p">);</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd">var</span> <span class="nx">styles</span> <span class="o">=</span> <span class="nx">StyleSheet</span><span class="p">.</span><span class="nx">create</span><span class="p">({</span>
+  <span class="na">container</span><span class="p">:</span> <span class="p">{</span>
+    <span class="na">alignItems</span><span class="p">:</span> <span class="s1">'center'</span><span class="p">,</span>
+  <span class="p">},</span>
+  <span class="na">show</span><span class="p">:</span> <span class="p">{</span>
+    <span class="na">fontSize</span><span class="p">:</span> <span class="mi">20</span><span class="p">,</span>
+    <span class="na">textAlign</span><span class="p">:</span> <span class="s1">'center'</span><span class="p">,</span>
+    <span class="na">margin</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
+  <span class="p">},</span>
+<span class="p">});</span>
+
+<span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="nx">ShowComponent</span><span class="p">;</span></code></pre></figure>
+
+<p>And make a test file <strong>ShowComponent-test.js</strong> in folder <strong><strong>tests</strong></strong></p>
+
+<figure class="highlight"><pre><code class="language-js" data-lang="js"><span class="s1">'use strict'</span><span class="p">;</span>
+
+<span class="kr">const</span> <span class="nx">React</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'react-native'</span><span class="p">);</span>
+<span class="kr">const</span> <span class="p">{</span> <span class="nx">View</span> <span class="p">}</span> <span class="o">=</span> <span class="nx">React</span><span class="p">;</span>
+<span class="kr">const</span> <span class="nx">TestUtils</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'react/lib/ReactTestUtils'</span><span class="p">);</span>
+
+<span class="nx">jest</span><span class="p">.</span><span class="nx">unmock</span><span class="p">(</span><span class="s1">'../ShowComponent'</span><span class="p">);</span>
+<span class="kr">const</span> <span class="nx">ShowComponent</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'../ShowComponent'</span><span class="p">);</span>
+
+<span class="nx">describe</span><span class="p">(</span><span class="s1">'&lt;ShowComponent /&gt;'</span><span class="p">,</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="nx">it</span><span class="p">(</span><span class="s1">'Component must show "Show Text"'</span><span class="p">,</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="c1">// Shallow rendering
+</span>
+    <span class="kr">const</span> <span class="nx">renderer</span> <span class="o">=</span> <span class="nx">TestUtils</span><span class="p">.</span><span class="nx">createRenderer</span><span class="p">();</span>
+    <span class="nx">renderer</span><span class="p">.</span><span class="nx">render</span><span class="p">(</span><span class="o">&lt;</span><span class="nx">ShowComponent</span> <span class="o">/&gt;</span><span class="p">);</span>
+    <span class="kd">let</span> <span class="nx">output</span> <span class="o">=</span> <span class="nx">renderer</span><span class="p">.</span><span class="nx">getRenderOutput</span><span class="p">();</span>
+    <span class="nx">expect</span><span class="p">(</span><span class="nx">output</span><span class="p">.</span><span class="nx">type</span><span class="p">).</span><span class="nx">toBe</span><span class="p">(</span><span class="nx">View</span><span class="p">);</span>
+    <span class="c1">// Deep render to DOM
+</span>
+    <span class="kr">const</span> <span class="nx">dom</span> <span class="o">=</span> <span class="nx">TestUtils</span><span class="p">.</span><span class="nx">renderIntoDocument</span><span class="p">(</span><span class="o">&lt;</span><span class="nx">ShowComponent</span> <span class="o">/&gt;</span><span class="p">);</span>
+    <span class="kr">const</span> <span class="nx">txtNode</span> <span class="o">=</span> <span class="nx">TestUtils</span><span class="p">.</span><span class="nx">findRenderedDOMComponentWithClass</span><span class="p">(</span><span class="nx">dom</span><span class="p">,</span> <span class="s1">'Text'</span><span class="p">);</span>
+    <span class="nx">expect</span><span class="p">(</span><span class="nx">txtNode</span><span class="p">.</span><span class="nx">textContent</span><span class="p">).</span><span class="nx">toBe</span><span class="p">(</span><span class="s1">'Show Text'</span><span class="p">);</span>
+  <span class="p">});</span>
+<span class="p">});</span></code></pre></figure>
+
+<p>Okay, run test command</p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell">npm <span class="nb">test</span></code></pre></figure>
+
+<p>and see the result</p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><span class="o">[</span> PASS <span class="o">]</span>  __tests__/ShowComponent-test.js <span class="o">(</span>0.905s<span class="o">)</span></code></pre></figure>
+
+<h2>
+  <a class="anchor" name="enzyme"></a> enzyme <a class="hash-link" href="#enzyme">#</a>
+</h2>
+<p>In the testing code above, we used <strong>ReactTestUtils</strong> to make a component test. But it’s hard to remember and write it. <strong>enzyme</strong> helps us to make a good deal with it. Let’s install it.</p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell">npm i --save-dev enzyme babel-preset-airbnb</code></pre></figure>
+
+<p>Unmock <strong>enzyme</strong> module by adding code below to your <strong>package.json</strong> file</p>
+
+<figure class="highlight"><pre><code class="language-js" data-lang="js"><span class="p">{</span>
+  <span class="s2">"jest"</span><span class="err">:</span> <span class="p">{</span>
+    <span class="s2">"unmockedModulePathPatterns"</span><span class="err">:</span> <span class="p">[</span>
+      <span class="s2">"enzyme"</span><span class="p">,</span>
+      <span class="p">...</span>
+    <span class="p">]</span>
+  <span class="p">}</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>Now, rewrite our testing code in file <strong>ShowComponent-test.js</strong></p>
+
+<figure class="highlight"><pre><code class="language-js" data-lang="js"><span class="s1">'use strict'</span><span class="p">;</span>
+
+<span class="kr">import</span> <span class="nx">React</span><span class="p">,</span> <span class="p">{</span> <span class="nx">View</span><span class="p">,</span> <span class="nx">Text</span> <span class="p">}</span> <span class="nx">from</span> <span class="s1">'react-native'</span><span class="p">;</span>
+<span class="kr">import</span> <span class="p">{</span> <span class="nx">shallow</span><span class="p">,</span> <span class="nx">mount</span> <span class="p">}</span> <span class="nx">from</span> <span class="s1">'enzyme'</span><span class="p">;</span>
+
+<span class="nx">jest</span><span class="p">.</span><span class="nx">unmock</span><span class="p">(</span><span class="s1">'../ShowComponent'</span><span class="p">);</span>
+<span class="kr">const</span> <span class="nx">ShowComponent</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'../ShowComponent'</span><span class="p">);</span>
+
+<span class="nx">describe</span><span class="p">(</span><span class="s1">'&lt;ShowComponent /&gt;'</span><span class="p">,</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="nx">it</span><span class="p">(</span><span class="s1">'Component must show "Show Text"'</span><span class="p">,</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="c1">// Shallow rendering
+</span>
+    <span class="kr">const</span> <span class="nx">output</span> <span class="o">=</span> <span class="nx">shallow</span><span class="p">(</span><span class="o">&lt;</span><span class="nx">ShowComponent</span> <span class="o">/&gt;</span><span class="p">);</span>
+    <span class="nx">expect</span><span class="p">(</span><span class="nx">output</span><span class="p">.</span><span class="nx">type</span><span class="p">()).</span><span class="nx">toBe</span><span class="p">(</span><span class="nx">View</span><span class="p">);</span>
+    <span class="nx">expect</span><span class="p">(</span><span class="nx">output</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="nx">Text</span><span class="p">).</span><span class="nx">length</span><span class="p">).</span><span class="nx">toBe</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+
+    <span class="c1">// Full DOM rendering
+</span>
+    <span class="kr">const</span> <span class="nx">wrapper</span><span class="o">=</span> <span class="nx">mount</span><span class="p">(</span><span class="o">&lt;</span><span class="nx">ShowComponent</span> <span class="o">/&gt;</span><span class="p">);</span>
+    <span class="nx">expect</span><span class="p">(</span><span class="nx">wrapper</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="nx">Text</span><span class="p">).</span><span class="nx">text</span><span class="p">()).</span><span class="nx">toBe</span><span class="p">(</span><span class="s1">'Show Text'</span><span class="p">);</span>
+  <span class="p">});</span>
+<span class="p">});</span></code></pre></figure>
+
+<p>Run test and see the result like this</p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><span class="o">[</span> PASS <span class="o">]</span>  __tests__/ShowComponent-test.js <span class="o">(</span>0.681s<span class="o">)</span></code></pre></figure>
+
+<p>We can also test with user action. Let’s create an component <strong>ActionComponent.js</strong> like this</p>
+
+<figure class="highlight"><pre><code class="language-js" data-lang="js"><span class="s1">'use strict'</span><span class="p">;</span>
+
+<span class="kr">import</span> <span class="nx">React</span><span class="p">,</span> <span class="p">{</span>
+  <span class="nx">Component</span><span class="p">,</span>
+  <span class="nx">StyleSheet</span><span class="p">,</span>
+  <span class="nx">Text</span><span class="p">,</span>
+  <span class="nx">View</span><span class="p">,</span>
+  <span class="nx">TouchableOpacity</span><span class="p">,</span>
+<span class="p">}</span> <span class="nx">from</span> <span class="s1">'react-native'</span><span class="p">;</span>
+
+<span class="kr">class</span> <span class="nx">ActionComponent</span> <span class="kr">extends</span> <span class="nx">Component</span> <span class="p">{</span>
+  <span class="nx">constructor</span><span class="p">(</span><span class="nx">props</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kr">super</span><span class="p">(</span><span class="nx">props</span><span class="p">);</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">state</span> <span class="o">=</span> <span class="p">{</span><span class="na">isOn</span><span class="p">:</span> <span class="kc">false</span><span class="p">};</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">_onPress</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">_onPress</span><span class="p">.</span><span class="nx">bind</span><span class="p">(</span><span class="k">this</span><span class="p">);</span>
+  <span class="p">}</span>
+  <span class="nx">_onPress</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">setState</span><span class="p">({</span><span class="na">isOn</span><span class="p">:</span> <span class="o">!</span><span class="k">this</span><span class="p">.</span><span class="nx">state</span><span class="p">.</span><span class="nx">isOn</span><span class="p">});</span>
+  <span class="p">}</span>
+  <span class="nx">render</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="p">(</span>
+      <span class="o">&lt;</span><span class="nx">View</span> <span class="nx">style</span><span class="o">=</span><span class="p">{</span><span class="nx">styles</span><span class="p">.</span><span class="nx">container</span><span class="p">}</span><span class="o">&gt;</span>
+        <span class="o">&lt;</span><span class="nx">TouchableOpacity</span> <span class="nx">onPress</span><span class="o">=</span><span class="p">{</span><span class="k">this</span><span class="p">.</span><span class="nx">_onPress</span><span class="p">}</span><span class="o">&gt;</span>
+          <span class="o">&lt;</span><span class="nx">Text</span> <span class="nx">style</span><span class="o">=</span><span class="p">{</span><span class="nx">styles</span><span class="p">.</span><span class="nx">button</span><span class="p">}</span><span class="o">&gt;</span>
+            <span class="p">{</span><span class="k">this</span><span class="p">.</span><span class="nx">state</span><span class="p">.</span><span class="nx">isOn</span> <span class="p">?</span> <span class="s2">"On"</span> <span class="p">:</span> <span class="s2">"Off"</span><span class="p">}</span>
+          <span class="o">&lt;</span><span class="sr">/Text&gt;</span><span class="err">
+</span>        <span class="o">&lt;</span><span class="sr">/TouchableOpacity&gt;</span><span class="err">
+</span>      <span class="o">&lt;</span><span class="sr">/View&gt;</span><span class="err">
+</span>    <span class="p">);</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd">var</span> <span class="nx">styles</span> <span class="o">=</span> <span class="nx">StyleSheet</span><span class="p">.</span><span class="nx">create</span><span class="p">({</span>
+  <span class="na">container</span><span class="p">:</span> <span class="p">{</span>
+    <span class="na">alignItems</span><span class="p">:</span> <span class="s1">'center'</span><span class="p">,</span>
+    <span class="na">backgroundColor</span><span class="p">:</span> <span class="s1">'red'</span><span class="p">,</span>
+  <span class="p">},</span>
+  <span class="na">button</span><span class="p">:</span> <span class="p">{</span>
+    <span class="na">fontSize</span><span class="p">:</span> <span class="mi">20</span><span class="p">,</span>
+    <span class="na">textAlign</span><span class="p">:</span> <span class="s1">'center'</span><span class="p">,</span>
+    <span class="na">margin</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
+  <span class="p">},</span>
+<span class="p">});</span>
+
+<span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="nx">ActionComponent</span><span class="p">;</span></code></pre></figure>
+
+<p>And the test file <strong>ActionComponent-test.js</strong> in folder <strong><strong>tests</strong></strong></p>
+
+<figure class="highlight"><pre><code class="language-js" data-lang="js"><span class="s1">'use strict'</span><span class="p">;</span>
+
+<span class="kr">import</span> <span class="nx">React</span><span class="p">,</span> <span class="p">{</span> <span class="nx">Text</span><span class="p">,</span> <span class="nx">TouchableOpacity</span> <span class="p">}</span> <span class="nx">from</span> <span class="s1">'react-native'</span><span class="p">;</span>
+<span class="kr">import</span> <span class="p">{</span> <span class="nx">mount</span> <span class="p">}</span> <span class="nx">from</span> <span class="s1">'enzyme'</span><span class="p">;</span>
+
+<span class="nx">jest</span><span class="p">.</span><span class="nx">unmock</span><span class="p">(</span><span class="s1">'../ActionComponent'</span><span class="p">);</span>
+<span class="kr">const</span> <span class="nx">ActionComponent</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'../ActionComponent'</span><span class="p">);</span>
+
+<span class="nx">describe</span><span class="p">(</span><span class="s1">'&lt;ActionComponent /&gt;'</span><span class="p">,</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="nx">it</span><span class="p">(</span><span class="s1">'Component response to user action'</span><span class="p">,</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="c1">// Full DOM rendering
+</span>
+    <span class="kr">const</span> <span class="nx">wrapper</span> <span class="o">=</span> <span class="nx">mount</span><span class="p">(</span><span class="o">&lt;</span><span class="nx">ActionComponent</span> <span class="o">/&gt;</span><span class="p">);</span>
+    <span class="nx">expect</span><span class="p">(</span><span class="nx">wrapper</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="nx">Text</span><span class="p">).</span><span class="nx">text</span><span class="p">()).</span><span class="nx">toBe</span><span class="p">(</span><span class="s1">'Off'</span><span class="p">);</span>
+    <span class="c1">// Simulate user tap
+</span>
+    <span class="nx">wrapper</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="nx">TouchableOpacity</span><span class="p">).</span><span class="nx">simulate</span><span class="p">(</span><span class="s1">'click'</span><span class="p">);</span>
+    <span class="nx">expect</span><span class="p">(</span><span class="nx">wrapper</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="nx">Text</span><span class="p">).</span><span class="nx">text</span><span class="p">()).</span><span class="nx">toBe</span><span class="p">(</span><span class="s1">'On'</span><span class="p">);</span>
+  <span class="p">});</span>
+<span class="p">});</span></code></pre></figure>
+
+<p>Now, run the test and see the result</p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><span class="o">[</span> PASS <span class="o">]</span>  __tests__/ActionComponent-test.js <span class="o">(</span>0.684s<span class="o">)</span></code></pre></figure>
+
+<h2>
+  <a class="anchor" name="conclusion"></a> Conclusion <a class="hash-link" href="#conclusion">#</a>
+</h2>
+<p>I am looking at my testing code, it’s shorter and clearer. These tools help me to save my time. I hope it saves your time too. If you don’t want to type the code from this tutorial, just checkout from <a href="https://github.com/apentle/react-native-babel-jest/blob/master/Example/README.md" target="_blank">github</a>.
+Thank you!</p>
+
+</div>
+
+<div class="related">
+  <h2>Related Posts</h2>
+  <ul class="related-posts">
+    
+      <li>
+        <h3>
+          <a href="/manage-react-native-theme">
+            Manage React Native Theme
+            <small>04 Jul 2016</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/react-native-testing-component-action">
+            React Native Testing: Function, Component and Action
+            <small>04 May 2016</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/what-happens-inside-react-native">
+            What happens inside React Native
+            <small>30 Mar 2016</small>
+          </a>
+        </h3>
+      </li>
+    
+  </ul>
+</div>
+
+<div class="related">
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.8&appId=131640303894504";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+<div class="fb-comments" data-href="http://www.apentle.com/two-helpful-testing-tools-react-native" data-numposts="5"></div>
+</div>
+
+      </div>
+    </div>
+
+    <label for="sidebar-checkbox" class="sidebar-toggle"></label>
+
+    <script>
+      (function(document) {
+        var toggle = document.querySelector('.sidebar-toggle');
+        var sidebar = document.querySelector('#sidebar');
+        var checkbox = document.querySelector('#sidebar-checkbox');
+
+        document.addEventListener('click', function(e) {
+          var target = e.target;
+
+          if(!checkbox.checked ||
+             sidebar.contains(target) ||
+             (target === checkbox || target === toggle)) return;
+
+          checkbox.checked = false;
+        }, false);
+      })(document);
+    </script>
+  </body>
+</html>

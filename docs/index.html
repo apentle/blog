@@ -1,0 +1,1252 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+  <head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  <!-- Enable responsiveness on mobile devices-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <!-- GA -->
+<script>
+  var ga_apt = '39805-1';
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-732' + ga_apt, 'auto');
+  ga('send', 'pageview');
+</script>
+
+  <title>
+    
+      Apentle &middot; React native hints and tips
+    
+  </title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/public/style.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Serif:400,400italic,700%7CPT+Sans:400">
+
+  <!-- Icons -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/public/apple-touch-icon-precomposed.png">
+
+  <!-- RSS -->
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="/feed.xml">
+</head>
+
+
+  <body class="theme-base-10">
+
+    <!-- Target for toggling the sidebar `.sidebar-checkbox` is for regular
+     styles, `#sidebar-checkbox` for behavior. -->
+<input type="checkbox" class="sidebar-checkbox" id="sidebar-checkbox">
+
+<!-- Toggleable sidebar -->
+<div class="sidebar" id="sidebar">
+  <div class="sidebar-item">
+    <p><a href="/" title="Apentle"><img src="/public/images/logo-i.png" srcset="/public/images/logo-i@2x.png 2x" alt="{{ site.name }}"></a></p>
+  </div>
+
+  <nav class="sidebar-nav">
+    <a class="sidebar-nav-item" href="/">Home</a>
+
+    
+
+    
+    
+      
+        
+      
+    
+      
+        
+      
+    
+      
+        
+          <a class="sidebar-nav-item" href="/about">About</a>
+        
+      
+    
+      
+    
+      
+        
+      
+    
+
+    <a class="sidebar-nav-item" href="https://www.facebook.com/apentle">Facebook</a>
+    <a class="sidebar-nav-item" href="https://twitter.com/apentle">Twitter</a>
+    <a class="sidebar-nav-item" href="https://github.com/apentle">GitHub</a>
+    <a class="sidebar-nav-item" href="/feed.xml">RSS</a>
+  </nav>
+
+  <div class="sidebar-item">
+    <p>
+      &copy; 2016 Apentle. All rights reserved.
+    </p>
+  </div>
+</div>
+
+
+    <!-- Wrap is the content to shift when toggling the sidebar. We wrap the
+         content to avoid any CSS collisions with our real content. -->
+    <div class="wrap">
+      <div class="masthead">
+        <div class="container">
+          <h3 class="masthead-title">
+            <a href="/" title="Home">Apentle</a>
+            <small>React native hints and tips</small>
+          </h3>
+        </div>
+      </div>
+
+      <div class="container content">
+        <div class="posts">
+  
+  <div class="post">
+    <h1 class="post-title">
+      <a href="/manage-react-native-theme">
+        Manage React Native Theme
+      </a>
+    </h1>
+
+    <span class="post-date">04 Jul 2016</span>
+
+    <p><img src="/public/2016/07/react-native-theme.jpg" alt="Manage React Native Theme" /></p>
+
+<p>React Native helps me to build user interface faster and easier. But I have some problems:</p>
+<ol>
+  <li>I often update my app style</li>
+  <li>I want to style my app like I'm styling a website</li>
+  <li>My users want to change theme in their app</li>
+</ol>
+<p>Yes, this means we need a react native theme manager. In this post, I’ll show you how to do it.
+Now, let’s get started.</p>
+
+<h2>
+  <a class="anchor" name="libraries"></a> Libraries <a class="hash-link" href="#libraries">#</a>
+</h2>
+<p>We are going to use two libraries for our react native project. They are:</p>
+<ol>
+  <li><strong>react-native-theme</strong> helps us to manage react native theme at compile time and runtime</li>
+  <li><strong>babel-plugin-react-native-css-class</strong> gives us another way to use StyleSheet in react native</li>
+  <li><strong>babel-preset-react-native</strong> helps us transform react native code</li>
+</ol>
+<p>To install these libraries, go to our project directory and run this command:</p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell">npm i --save react-native-theme babel-plugin-react-native-css-class babel-preset-react-native</code></pre></figure>
+
+<p>Now, we can start to use these libraries in our project.</p>
+
+<h2>
+  <a class="anchor" name="react-native-theme"></a> Manage theme with react-native-theme <a class="hash-link" href="#react-native-theme">#</a>
+</h2>
+<p>At first, we need to register theme data in some fist lines of code in our project. May be in <strong>index.ios.js</strong> and <strong>index.android.js</strong> file. To remove duplicate in two files above, we can require a new file <strong>app.js</strong>. Our <strong>index.ios.js</strong> and <strong>index.android.js</strong> may look like:</p>
+
+<figure class="highlight"><pre><code class="language-js" data-lang="js"><span class="s1">'use strict'</span><span class="p">;</span>
+
+<span class="kr">const</span> <span class="p">{</span><span class="nx">AppRegistry</span><span class="p">}</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'react-native'</span><span class="p">);</span>
+<span class="kr">const</span> <span class="nx">app</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'./app'</span><span class="p">);</span>
+
+<span class="nx">AppRegistry</span><span class="p">.</span><span class="nx">registerComponent</span><span class="p">(</span><span class="s1">'ThemeExample'</span><span class="p">,</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="nx">app</span><span class="p">);</span></code></pre></figure>
+
+<p>And <strong>app.js</strong> might be:</p>
+
+<figure class="highlight"><pre><code class="language-js" data-lang="js"><span class="s1">'use strict'</span><span class="p">;</span>
+
+<span class="kr">import</span> <span class="nx">React</span><span class="p">,</span> <span class="p">{</span>
+  <span class="nx">Component</span><span class="p">,</span>
+  <span class="nx">Text</span><span class="p">,</span>
+  <span class="nx">View</span><span class="p">,</span>
+  <span class="nx">TouchableOpacity</span><span class="p">,</span>
+<span class="p">}</span> <span class="nx">from</span> <span class="s1">'react-native'</span><span class="p">;</span>
+<span class="kr">import</span> <span class="nx">theme</span><span class="p">,</span> <span class="p">{</span><span class="nx">styles</span><span class="p">}</span> <span class="nx">from</span> <span class="s1">'react-native-theme'</span><span class="p">;</span>
+<span class="kr">const</span> <span class="nx">ThemeExample</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'./ThemeExample'</span><span class="p">);</span>
+
+<span class="c1">// Setup Themes
+</span>
+<span class="nx">theme</span><span class="p">.</span><span class="nx">add</span><span class="p">(</span><span class="nx">require</span><span class="p">(</span><span class="s1">'./theme/default'</span><span class="p">));</span>
+<span class="nx">theme</span><span class="p">.</span><span class="nx">add</span><span class="p">(</span><span class="nx">require</span><span class="p">(</span><span class="s1">'./theme/red'</span><span class="p">),</span> <span class="s1">'red'</span><span class="p">);</span>
+
+<span class="kr">const</span> <span class="nx">App</span> <span class="o">=</span> <span class="nx">React</span><span class="p">.</span><span class="nx">createClass</span><span class="p">({</span>
+  <span class="nx">getInitialState</span><span class="p">()</span> <span class="p">{</span>
+    <span class="nx">theme</span><span class="p">.</span><span class="nx">setRoot</span><span class="p">(</span><span class="k">this</span><span class="p">);</span>
+    <span class="k">return</span> <span class="kc">null</span><span class="p">;</span>
+  <span class="p">},</span>
+  <span class="nx">_defaultTheme</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">theme</span><span class="p">.</span><span class="nx">name</span> <span class="o">!==</span> <span class="s1">'default'</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">theme</span><span class="p">.</span><span class="nx">active</span><span class="p">();</span>
+    <span class="p">}</span>
+  <span class="p">},</span>
+  <span class="nx">_redTheme</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">theme</span><span class="p">.</span><span class="nx">name</span> <span class="o">!==</span> <span class="s1">'red'</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">theme</span><span class="p">.</span><span class="nx">active</span><span class="p">(</span><span class="s1">'red'</span><span class="p">);</span>
+    <span class="p">}</span>
+  <span class="p">},</span>
+  <span class="nx">render</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="p">(</span>
+      <span class="o">&lt;</span><span class="nx">View</span> <span class="kr">class</span><span class="o">=</span><span class="s2">"container"</span><span class="o">&gt;</span>
+        <span class="o">&lt;</span><span class="nx">ThemeExample</span> <span class="o">/&gt;</span>
+        <span class="o">&lt;</span><span class="nx">TouchableOpacity</span> <span class="nx">onPress</span><span class="o">=</span><span class="p">{</span><span class="k">this</span><span class="p">.</span><span class="nx">_defaultTheme</span><span class="p">}</span><span class="o">&gt;</span>
+          <span class="o">&lt;</span><span class="nx">View</span> <span class="kr">class</span><span class="o">=</span><span class="s2">"button default"</span><span class="o">&gt;</span>
+            <span class="o">&lt;</span><span class="nx">Text</span> <span class="kr">class</span><span class="o">=</span><span class="s2">"label"</span><span class="o">&gt;</span><span class="nx">DEFAULT</span> <span class="nx">THEME</span><span class="o">&lt;</span><span class="sr">/Text&gt;</span><span class="err">
+</span>          <span class="o">&lt;</span><span class="sr">/View&gt;</span><span class="err">
+</span>        <span class="o">&lt;</span><span class="sr">/TouchableOpacity&gt;</span><span class="err">
+</span>        <span class="o">&lt;</span><span class="nx">TouchableOpacity</span> <span class="nx">onPress</span><span class="o">=</span><span class="p">{</span><span class="k">this</span><span class="p">.</span><span class="nx">_redTheme</span><span class="p">}</span><span class="o">&gt;</span>
+          <span class="o">&lt;</span><span class="nx">View</span> <span class="kr">class</span><span class="o">=</span><span class="s2">"button red"</span><span class="o">&gt;</span>
+            <span class="o">&lt;</span><span class="nx">Text</span> <span class="kr">class</span><span class="o">=</span><span class="s2">"label"</span><span class="o">&gt;</span><span class="nx">RED</span> <span class="nx">THEME</span><span class="o">&lt;</span><span class="sr">/Text&gt;</span><span class="err">
+</span>          <span class="o">&lt;</span><span class="sr">/View&gt;</span><span class="err">
+</span>        <span class="o">&lt;</span><span class="sr">/TouchableOpacity&gt;</span><span class="err">
+</span>      <span class="o">&lt;</span><span class="sr">/View&gt;</span><span class="err">
+</span>    <span class="p">);</span>
+  <span class="p">}</span>
+<span class="p">});</span>
+
+<span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="nx">App</span><span class="p">;</span></code></pre></figure>
+
+<p>In this file, we should see two important lines:</p>
+
+<figure class="highlight"><pre><code class="language-js" data-lang="js"><span class="nx">theme</span><span class="p">.</span><span class="nx">add</span><span class="p">(</span><span class="nx">require</span><span class="p">(</span><span class="s1">'./theme/default'</span><span class="p">));</span>
+<span class="nx">theme</span><span class="p">.</span><span class="nx">add</span><span class="p">(</span><span class="nx">require</span><span class="p">(</span><span class="s1">'./theme/red'</span><span class="p">),</span> <span class="s1">'red'</span><span class="p">);</span></code></pre></figure>
+
+<p>These lines add theme data for our project. We have two themes called “default” and “red”. In this example, we will switch between two themes at runtime.
+Now, we look at the file <strong>theme/default.js</strong>:</p>
+
+<figure class="highlight"><pre><code class="language-js" data-lang="js"><span class="s1">'use strict'</span><span class="p">;</span>
+
+<span class="kr">const</span> <span class="nx">styles</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="na">container</span><span class="p">:</span> <span class="p">{</span>
+    <span class="na">flex</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="na">justifyContent</span><span class="p">:</span> <span class="s1">'center'</span><span class="p">,</span>
+    <span class="na">alignItems</span><span class="p">:</span> <span class="s1">'center'</span><span class="p">,</span>
+    <span class="na">backgroundColor</span><span class="p">:</span> <span class="s1">'#F5FCFF'</span><span class="p">,</span>
+  <span class="p">},</span>
+  <span class="na">header</span><span class="p">:</span> <span class="p">{</span>
+    <span class="na">fontSize</span><span class="p">:</span> <span class="mi">30</span><span class="p">,</span>
+    <span class="na">fontWeight</span><span class="p">:</span> <span class="s1">'bold'</span><span class="p">,</span>
+    <span class="na">margin</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
+  <span class="p">},</span>
+  <span class="na">body</span><span class="p">:</span> <span class="p">{</span>
+    <span class="na">margin</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
+    <span class="na">alignItems</span><span class="p">:</span> <span class="s1">'center'</span><span class="p">,</span>
+  <span class="p">},</span>
+  <span class="na">content</span><span class="p">:</span> <span class="p">{</span>
+    <span class="na">fontSize</span><span class="p">:</span> <span class="mi">20</span><span class="p">,</span>
+  <span class="p">},</span>
+  <span class="na">strong</span><span class="p">:</span> <span class="p">{</span>
+    <span class="na">fontWeight</span><span class="p">:</span> <span class="s1">'bold'</span><span class="p">,</span>
+  <span class="p">},</span>
+  <span class="na">button</span><span class="p">:</span> <span class="p">{</span>
+    <span class="na">flex</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="na">alignItems</span><span class="p">:</span> <span class="s1">'center'</span><span class="p">,</span>
+    <span class="na">backgroundColor</span><span class="p">:</span> <span class="s1">'#4DC7A4'</span><span class="p">,</span>
+    <span class="na">paddingHorizontal</span><span class="p">:</span> <span class="mi">40</span><span class="p">,</span>
+    <span class="na">borderRadius</span><span class="p">:</span> <span class="mi">25</span><span class="p">,</span>
+    <span class="na">width</span><span class="p">:</span> <span class="mi">300</span><span class="p">,</span>
+    <span class="na">height</span><span class="p">:</span> <span class="mi">50</span><span class="p">,</span>
+    <span class="na">overflow</span><span class="p">:</span> <span class="s1">'hidden'</span><span class="p">,</span>
+    <span class="na">margin</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
+  <span class="p">},</span>
+  <span class="na">label</span><span class="p">:</span> <span class="p">{</span>
+    <span class="na">margin</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
+    <span class="na">fontSize</span><span class="p">:</span> <span class="mi">23</span><span class="p">,</span>
+    <span class="na">color</span><span class="p">:</span> <span class="s1">'#FFF'</span><span class="p">,</span>
+  <span class="p">},</span>
+  <span class="na">footer</span><span class="p">:</span> <span class="p">{</span>
+    <span class="na">fontSize</span><span class="p">:</span> <span class="mi">30</span><span class="p">,</span>
+    <span class="na">fontWeight</span><span class="p">:</span> <span class="s1">'bold'</span><span class="p">,</span>
+    <span class="na">margin</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
+  <span class="p">},</span>
+  <span class="na">default</span><span class="p">:</span> <span class="p">{</span>
+    <span class="na">backgroundColor</span><span class="p">:</span> <span class="s1">'#4DC7A4'</span><span class="p">,</span>
+  <span class="p">},</span>
+  <span class="na">red</span><span class="p">:</span> <span class="p">{</span>
+    <span class="na">backgroundColor</span><span class="p">:</span> <span class="s1">'red'</span><span class="p">,</span>
+  <span class="p">},</span>
+<span class="p">};</span>
+
+<span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="nx">styles</span><span class="p">;</span></code></pre></figure>
+
+<p>That’s it. It only have styles data. Then, we look at the file <strong>ThemeExample.js</strong>, that uses styles from theme:</p>
+
+<figure class="highlight"><pre><code class="language-js" data-lang="js"><span class="s1">'use strict'</span><span class="p">;</span>
+
+<span class="kr">import</span> <span class="nx">React</span><span class="p">,</span> <span class="p">{</span>
+  <span class="nx">Component</span><span class="p">,</span>
+  <span class="nx">Text</span><span class="p">,</span>
+  <span class="nx">View</span><span class="p">,</span>
+  <span class="nx">TouchableOpacity</span><span class="p">,</span>
+<span class="p">}</span> <span class="nx">from</span> <span class="s1">'react-native'</span><span class="p">;</span>
+
+<span class="kr">import</span> <span class="p">{</span><span class="nx">styles</span><span class="p">}</span> <span class="nx">from</span> <span class="s1">'react-native-theme'</span><span class="p">;</span>
+
+<span class="kr">class</span> <span class="nx">ThemeExample</span> <span class="kr">extends</span> <span class="nx">Component</span> <span class="p">{</span>
+  <span class="nx">render</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="p">(</span>
+      <span class="o">&lt;</span><span class="nx">View</span> <span class="kr">class</span><span class="o">=</span><span class="s1">'container'</span><span class="o">&gt;</span>
+        <span class="o">&lt;</span><span class="nx">Text</span> <span class="kr">class</span><span class="o">=</span><span class="s2">"header"</span><span class="o">&gt;</span>
+          <span class="nx">Header</span> <span class="nx">Title</span>
+        <span class="o">&lt;</span><span class="sr">/Text&gt;</span><span class="err">
+</span>        <span class="o">&lt;</span><span class="nx">View</span> <span class="kr">class</span><span class="o">=</span><span class="s2">"body"</span><span class="o">&gt;</span>
+          <span class="o">&lt;</span><span class="nx">Text</span> <span class="kr">class</span><span class="o">=</span><span class="s2">"content"</span><span class="o">&gt;</span>
+            <span class="o">&lt;</span><span class="nx">Text</span> <span class="kr">class</span><span class="o">=</span><span class="s2">"strong"</span><span class="o">&gt;</span><span class="nx">react</span><span class="o">-</span><span class="kr">native</span><span class="o">-</span><span class="nx">theme</span><span class="o">&lt;</span><span class="sr">/Text&gt; helps you manage your application theme. Separate style files and switch theme at runtime...</span><span class="err">
+</span>          <span class="o">&lt;</span><span class="sr">/Text&gt;</span><span class="err">
+</span>          <span class="o">&lt;</span><span class="nx">TouchableOpacity</span><span class="o">&gt;</span>
+            <span class="o">&lt;</span><span class="nx">View</span> <span class="kr">class</span><span class="o">=</span><span class="s2">"button"</span><span class="o">&gt;</span>
+              <span class="o">&lt;</span><span class="nx">Text</span> <span class="kr">class</span><span class="o">=</span><span class="s2">"label"</span><span class="o">&gt;</span><span class="nx">OK</span><span class="o">&lt;</span><span class="sr">/Text&gt;</span><span class="err">
+</span>            <span class="o">&lt;</span><span class="sr">/View&gt;</span><span class="err">
+</span>          <span class="o">&lt;</span><span class="sr">/TouchableOpacity&gt;</span><span class="err">
+</span>        <span class="o">&lt;</span><span class="sr">/View&gt;</span><span class="err">
+</span>        <span class="o">&lt;</span><span class="nx">Text</span> <span class="kr">class</span><span class="o">=</span><span class="s2">"footer"</span><span class="o">&gt;</span>
+          <span class="nx">Footer</span>
+        <span class="o">&lt;</span><span class="sr">/Text&gt;</span><span class="err">
+</span>      <span class="o">&lt;</span><span class="sr">/View&gt;</span><span class="err">
+</span>    <span class="p">);</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="nx">ThemeExample</span><span class="p">;</span></code></pre></figure>
+
+<p>And we see an important line <strong>import {styles} from ‘react-native-theme’;</strong>. This line makes us can use <strong>styles</strong> variant.</p>
+
+<p>All the code above, we can see a strange attribute of react native component. How can we use it? Let’s take a look the next section.</p>
+
+<h2>
+  <a class="anchor" name="libraries"></a> Component <i>class</i> tag <a class="hash-link" href="#libraries">#</a>
+</h2>
+<p>Yes, we use <strong>class</strong> tag usually when we’re styling our website. But in react native, it is a weird tag for a component. However we can use it with <strong>babel-plugin-react-native-css-class</strong> plugin.
+Before we use it, we need to configure our transform options via <strong>.babelrc</strong> in our project directory.</p>
+
+<figure class="highlight"><pre><code class="language-js" data-lang="js"><span class="p">{</span>
+  <span class="s2">"presets"</span><span class="err">:</span> <span class="p">[</span> <span class="s2">"react-native"</span> <span class="p">],</span>
+  <span class="s2">"plugins"</span><span class="err">:</span> <span class="p">[</span> <span class="s2">"react-native-css-class"</span> <span class="p">]</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>This plugin will automatically transform our <strong>class</strong> tag to react native standard <strong>style</strong> tag. For example, our output of <strong>ThemeExample.js</strong> file will look like:</p>
+
+<figure class="highlight"><pre><code class="language-js" data-lang="js"><span class="s1">'use strict'</span><span class="p">;</span>
+
+<span class="kr">import</span> <span class="nx">React</span><span class="p">,</span> <span class="p">{</span> <span class="nx">Component</span><span class="p">,</span> <span class="nx">Text</span><span class="p">,</span> <span class="nx">View</span><span class="p">,</span> <span class="nx">TouchableOpacity</span> <span class="p">}</span> <span class="nx">from</span> <span class="s1">'react-native'</span><span class="p">;</span>
+
+<span class="kr">import</span> <span class="p">{</span> <span class="nx">styles</span> <span class="p">}</span> <span class="nx">from</span> <span class="s1">'react-native-theme'</span><span class="p">;</span>
+
+<span class="kr">class</span> <span class="nx">ThemeExample</span> <span class="kr">extends</span> <span class="nx">Component</span> <span class="p">{</span>
+  <span class="nx">render</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="o">&lt;</span><span class="nx">View</span> <span class="nx">style</span><span class="o">=</span><span class="p">{</span><span class="nx">styles</span><span class="p">.</span><span class="nx">container</span><span class="p">}</span><span class="o">&gt;</span>
+        <span class="o">&lt;</span><span class="nx">Text</span> <span class="nx">style</span><span class="o">=</span><span class="p">{</span><span class="nx">styles</span><span class="p">.</span><span class="nx">header</span><span class="p">}</span><span class="o">&gt;</span>
+          <span class="nx">Header</span> <span class="nx">Title</span>
+        <span class="o">&lt;</span><span class="sr">/Text&gt;</span><span class="err">
+</span>        <span class="o">&lt;</span><span class="nx">View</span> <span class="nx">style</span><span class="o">=</span><span class="p">{</span><span class="nx">styles</span><span class="p">.</span><span class="nx">body</span><span class="p">}</span><span class="o">&gt;</span>
+          <span class="o">&lt;</span><span class="nx">Text</span> <span class="nx">style</span><span class="o">=</span><span class="p">{</span><span class="nx">styles</span><span class="p">.</span><span class="nx">content</span><span class="p">}</span><span class="o">&gt;</span>
+            <span class="o">&lt;</span><span class="nx">Text</span> <span class="nx">style</span><span class="o">=</span><span class="p">{</span><span class="nx">styles</span><span class="p">.</span><span class="nx">strong</span><span class="p">}</span><span class="o">&gt;</span><span class="nx">react</span><span class="o">-</span><span class="kr">native</span><span class="o">-</span><span class="nx">theme</span><span class="o">&lt;</span><span class="sr">/Text&gt; helps you manage your application theme. Separate style files and switch theme at runtime...</span><span class="err">
+</span>          <span class="o">&lt;</span><span class="sr">/Text&gt;</span><span class="err">
+</span>          <span class="o">&lt;</span><span class="nx">TouchableOpacity</span><span class="o">&gt;</span>
+            <span class="o">&lt;</span><span class="nx">View</span> <span class="nx">style</span><span class="o">=</span><span class="p">{</span><span class="nx">styles</span><span class="p">.</span><span class="nx">button</span><span class="p">}</span><span class="o">&gt;</span>
+              <span class="o">&lt;</span><span class="nx">Text</span> <span class="nx">style</span><span class="o">=</span><span class="p">{</span><span class="nx">styles</span><span class="p">.</span><span class="nx">label</span><span class="p">}</span><span class="o">&gt;</span><span class="nx">OK</span><span class="o">&lt;</span><span class="sr">/Text&gt;</span><span class="err">
+</span>            <span class="o">&lt;</span><span class="sr">/View&gt;</span><span class="err">
+</span>          <span class="o">&lt;</span><span class="sr">/TouchableOpacity&gt;</span><span class="err">
+</span>        <span class="o">&lt;</span><span class="sr">/View&gt;</span><span class="err">
+</span>        <span class="o">&lt;</span><span class="nx">Text</span> <span class="nx">style</span><span class="o">=</span><span class="p">{</span><span class="nx">styles</span><span class="p">.</span><span class="nx">footer</span><span class="p">}</span><span class="o">&gt;</span>
+          <span class="nx">Footer</span>
+        <span class="o">&lt;</span><span class="sr">/Text&gt;</span><span class="err">
+</span>      <span class="o">&lt;</span><span class="sr">/View&gt;;</span><span class="err">
+</span>  <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="nx">ThemeExample</span><span class="p">;</span></code></pre></figure>
+
+<p>Yeah! Now we can use <strong>class</strong> tag as the way we use in the website.</p>
+
+<h2>
+  <a class="anchor" name="conclusion"></a> Conclusion <a class="hash-link" href="#conclusion">#</a>
+</h2>
+<p>Our example will run like this:
+<img src="https://raw.githubusercontent.com/apentle/react-native-theme-example/master/screenshot.gif" alt="React Native Theme Example" /></p>
+
+<p>You can also download full source code from <a href="https://github.com/apentle/react-native-theme-example" target="_blank">Github</a>.</p>
+
+<p>If you have any question, please leave a comment below. Thank you!</p>
+
+  </div>
+  
+  <div class="post">
+    <h1 class="post-title">
+      <a href="/two-helpful-testing-tools-react-native">
+        Two helpful testing tools for React Native
+      </a>
+    </h1>
+
+    <span class="post-date">25 May 2016</span>
+
+    <p><img src="/public/2016/05/testing-tools.jpg" alt="Two helpful testing tools for React Native" /></p>
+
+<p>In the <a href="/react-native-testing-component-action/">previous post</a>, we introduced how to make a test for component in react native. Today, we introduce two tools to help you write testing code much easier. <a href="https://github.com/apentle/react-native-babel-jest" target="_blank">react-native-babel-jest</a> help you to configure testing enviroment quickly and <a href="http://airbnb.io/enzyme/" target="_blank">enzyme</a> help you traverse your React Native Components’ output easier.</p>
+
+<h2>
+  <a class="anchor" name="react-native-babel-jest"></a> react-native-babel-jest <a class="hash-link" href="#react-native-babel-jest">#</a>
+</h2>
+<p><a href="https://github.com/apentle/react-native-babel-jest" target="_blank">react-native-babel-jest</a> help you to configure testing enviroment quickly. First, install it to your project by command</p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell">npm i --save-dev react-native-babel-jest</code></pre></figure>
+
+<p>Add the code below to your <strong>package.json</strong> file</p>
+
+<figure class="highlight"><pre><code class="language-js" data-lang="js"><span class="p">{</span>
+  <span class="s2">"scripts"</span><span class="err">:</span> <span class="p">{</span>
+    <span class="s2">"test"</span><span class="err">:</span> <span class="s2">"jest"</span>
+  <span class="p">},</span>
+  <span class="p">...</span>
+  <span class="s2">"jest"</span><span class="err">:</span> <span class="p">{</span>
+    <span class="s2">"scriptPreprocessor"</span><span class="err">:</span> <span class="s2">"&lt;rootDir&gt;/node_modules/react-native-babel-jest"</span><span class="p">,</span>
+    <span class="s2">"setupEnvScriptFile"</span><span class="err">:</span> <span class="s2">"&lt;rootDir&gt;/node_modules/react-native-babel-jest/env.js"</span><span class="p">,</span>
+    <span class="s2">"testPathIgnorePatterns"</span><span class="err">:</span> <span class="p">[</span>
+      <span class="s2">"/node_modules/"</span>
+    <span class="p">],</span>
+    <span class="s2">"testFileExtensions"</span><span class="err">:</span> <span class="p">[</span>
+      <span class="s2">"js"</span>
+    <span class="p">],</span>
+    <span class="s2">"unmockedModulePathPatterns"</span><span class="err">:</span> <span class="p">[</span>
+      <span class="s2">"react"</span><span class="p">,</span>
+      <span class="s2">"promise"</span><span class="p">,</span>
+      <span class="s2">"source-map"</span>
+    <span class="p">]</span>
+  <span class="p">}</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>The most important things on these code are <strong>scriptPreprocessor</strong> and <strong>setupEnvScriptFile</strong>. It will help you to setup testing enviroment. It includes react-native-mocking object, so you don’t need to mock it manually. Good sound!
+Let’s write a component <strong>ShowComponent.js</strong> like this</p>
+
+<figure class="highlight"><pre><code class="language-js" data-lang="js"><span class="s1">'use strict'</span><span class="p">;</span>
+
+<span class="kr">import</span> <span class="nx">React</span><span class="p">,</span> <span class="p">{</span>
+  <span class="nx">Component</span><span class="p">,</span>
+  <span class="nx">StyleSheet</span><span class="p">,</span>
+  <span class="nx">Text</span><span class="p">,</span>
+  <span class="nx">View</span><span class="p">,</span>
+<span class="p">}</span> <span class="nx">from</span> <span class="s1">'react-native'</span><span class="p">;</span>
+
+<span class="kr">class</span> <span class="nx">ShowComponent</span> <span class="kr">extends</span> <span class="nx">Component</span> <span class="p">{</span>
+  <span class="nx">render</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="p">(</span>
+      <span class="o">&lt;</span><span class="nx">View</span> <span class="nx">style</span><span class="o">=</span><span class="p">{</span><span class="nx">styles</span><span class="p">.</span><span class="nx">container</span><span class="p">}</span><span class="o">&gt;</span>
+        <span class="o">&lt;</span><span class="nx">Text</span> <span class="nx">style</span><span class="o">=</span><span class="p">{</span><span class="nx">styles</span><span class="p">.</span><span class="nx">show</span><span class="p">}</span><span class="o">&gt;</span>
+          <span class="nx">Show</span> <span class="nx">Text</span>
+        <span class="o">&lt;</span><span class="sr">/Text&gt;</span><span class="err">
+</span>      <span class="o">&lt;</span><span class="sr">/View&gt;</span><span class="err">
+</span>    <span class="p">);</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd">var</span> <span class="nx">styles</span> <span class="o">=</span> <span class="nx">StyleSheet</span><span class="p">.</span><span class="nx">create</span><span class="p">({</span>
+  <span class="na">container</span><span class="p">:</span> <span class="p">{</span>
+    <span class="na">alignItems</span><span class="p">:</span> <span class="s1">'center'</span><span class="p">,</span>
+  <span class="p">},</span>
+  <span class="na">show</span><span class="p">:</span> <span class="p">{</span>
+    <span class="na">fontSize</span><span class="p">:</span> <span class="mi">20</span><span class="p">,</span>
+    <span class="na">textAlign</span><span class="p">:</span> <span class="s1">'center'</span><span class="p">,</span>
+    <span class="na">margin</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
+  <span class="p">},</span>
+<span class="p">});</span>
+
+<span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="nx">ShowComponent</span><span class="p">;</span></code></pre></figure>
+
+<p>And make a test file <strong>ShowComponent-test.js</strong> in folder <strong><strong>tests</strong></strong></p>
+
+<figure class="highlight"><pre><code class="language-js" data-lang="js"><span class="s1">'use strict'</span><span class="p">;</span>
+
+<span class="kr">const</span> <span class="nx">React</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'react-native'</span><span class="p">);</span>
+<span class="kr">const</span> <span class="p">{</span> <span class="nx">View</span> <span class="p">}</span> <span class="o">=</span> <span class="nx">React</span><span class="p">;</span>
+<span class="kr">const</span> <span class="nx">TestUtils</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'react/lib/ReactTestUtils'</span><span class="p">);</span>
+
+<span class="nx">jest</span><span class="p">.</span><span class="nx">unmock</span><span class="p">(</span><span class="s1">'../ShowComponent'</span><span class="p">);</span>
+<span class="kr">const</span> <span class="nx">ShowComponent</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'../ShowComponent'</span><span class="p">);</span>
+
+<span class="nx">describe</span><span class="p">(</span><span class="s1">'&lt;ShowComponent /&gt;'</span><span class="p">,</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="nx">it</span><span class="p">(</span><span class="s1">'Component must show "Show Text"'</span><span class="p">,</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="c1">// Shallow rendering
+</span>
+    <span class="kr">const</span> <span class="nx">renderer</span> <span class="o">=</span> <span class="nx">TestUtils</span><span class="p">.</span><span class="nx">createRenderer</span><span class="p">();</span>
+    <span class="nx">renderer</span><span class="p">.</span><span class="nx">render</span><span class="p">(</span><span class="o">&lt;</span><span class="nx">ShowComponent</span> <span class="o">/&gt;</span><span class="p">);</span>
+    <span class="kd">let</span> <span class="nx">output</span> <span class="o">=</span> <span class="nx">renderer</span><span class="p">.</span><span class="nx">getRenderOutput</span><span class="p">();</span>
+    <span class="nx">expect</span><span class="p">(</span><span class="nx">output</span><span class="p">.</span><span class="nx">type</span><span class="p">).</span><span class="nx">toBe</span><span class="p">(</span><span class="nx">View</span><span class="p">);</span>
+    <span class="c1">// Deep render to DOM
+</span>
+    <span class="kr">const</span> <span class="nx">dom</span> <span class="o">=</span> <span class="nx">TestUtils</span><span class="p">.</span><span class="nx">renderIntoDocument</span><span class="p">(</span><span class="o">&lt;</span><span class="nx">ShowComponent</span> <span class="o">/&gt;</span><span class="p">);</span>
+    <span class="kr">const</span> <span class="nx">txtNode</span> <span class="o">=</span> <span class="nx">TestUtils</span><span class="p">.</span><span class="nx">findRenderedDOMComponentWithClass</span><span class="p">(</span><span class="nx">dom</span><span class="p">,</span> <span class="s1">'Text'</span><span class="p">);</span>
+    <span class="nx">expect</span><span class="p">(</span><span class="nx">txtNode</span><span class="p">.</span><span class="nx">textContent</span><span class="p">).</span><span class="nx">toBe</span><span class="p">(</span><span class="s1">'Show Text'</span><span class="p">);</span>
+  <span class="p">});</span>
+<span class="p">});</span></code></pre></figure>
+
+<p>Okay, run test command</p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell">npm <span class="nb">test</span></code></pre></figure>
+
+<p>and see the result</p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><span class="o">[</span> PASS <span class="o">]</span>  __tests__/ShowComponent-test.js <span class="o">(</span>0.905s<span class="o">)</span></code></pre></figure>
+
+<h2>
+  <a class="anchor" name="enzyme"></a> enzyme <a class="hash-link" href="#enzyme">#</a>
+</h2>
+<p>In the testing code above, we used <strong>ReactTestUtils</strong> to make a component test. But it’s hard to remember and write it. <strong>enzyme</strong> helps us to make a good deal with it. Let’s install it.</p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell">npm i --save-dev enzyme babel-preset-airbnb</code></pre></figure>
+
+<p>Unmock <strong>enzyme</strong> module by adding code below to your <strong>package.json</strong> file</p>
+
+<figure class="highlight"><pre><code class="language-js" data-lang="js"><span class="p">{</span>
+  <span class="s2">"jest"</span><span class="err">:</span> <span class="p">{</span>
+    <span class="s2">"unmockedModulePathPatterns"</span><span class="err">:</span> <span class="p">[</span>
+      <span class="s2">"enzyme"</span><span class="p">,</span>
+      <span class="p">...</span>
+    <span class="p">]</span>
+  <span class="p">}</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>Now, rewrite our testing code in file <strong>ShowComponent-test.js</strong></p>
+
+<figure class="highlight"><pre><code class="language-js" data-lang="js"><span class="s1">'use strict'</span><span class="p">;</span>
+
+<span class="kr">import</span> <span class="nx">React</span><span class="p">,</span> <span class="p">{</span> <span class="nx">View</span><span class="p">,</span> <span class="nx">Text</span> <span class="p">}</span> <span class="nx">from</span> <span class="s1">'react-native'</span><span class="p">;</span>
+<span class="kr">import</span> <span class="p">{</span> <span class="nx">shallow</span><span class="p">,</span> <span class="nx">mount</span> <span class="p">}</span> <span class="nx">from</span> <span class="s1">'enzyme'</span><span class="p">;</span>
+
+<span class="nx">jest</span><span class="p">.</span><span class="nx">unmock</span><span class="p">(</span><span class="s1">'../ShowComponent'</span><span class="p">);</span>
+<span class="kr">const</span> <span class="nx">ShowComponent</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'../ShowComponent'</span><span class="p">);</span>
+
+<span class="nx">describe</span><span class="p">(</span><span class="s1">'&lt;ShowComponent /&gt;'</span><span class="p">,</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="nx">it</span><span class="p">(</span><span class="s1">'Component must show "Show Text"'</span><span class="p">,</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="c1">// Shallow rendering
+</span>
+    <span class="kr">const</span> <span class="nx">output</span> <span class="o">=</span> <span class="nx">shallow</span><span class="p">(</span><span class="o">&lt;</span><span class="nx">ShowComponent</span> <span class="o">/&gt;</span><span class="p">);</span>
+    <span class="nx">expect</span><span class="p">(</span><span class="nx">output</span><span class="p">.</span><span class="nx">type</span><span class="p">()).</span><span class="nx">toBe</span><span class="p">(</span><span class="nx">View</span><span class="p">);</span>
+    <span class="nx">expect</span><span class="p">(</span><span class="nx">output</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="nx">Text</span><span class="p">).</span><span class="nx">length</span><span class="p">).</span><span class="nx">toBe</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+
+    <span class="c1">// Full DOM rendering
+</span>
+    <span class="kr">const</span> <span class="nx">wrapper</span><span class="o">=</span> <span class="nx">mount</span><span class="p">(</span><span class="o">&lt;</span><span class="nx">ShowComponent</span> <span class="o">/&gt;</span><span class="p">);</span>
+    <span class="nx">expect</span><span class="p">(</span><span class="nx">wrapper</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="nx">Text</span><span class="p">).</span><span class="nx">text</span><span class="p">()).</span><span class="nx">toBe</span><span class="p">(</span><span class="s1">'Show Text'</span><span class="p">);</span>
+  <span class="p">});</span>
+<span class="p">});</span></code></pre></figure>
+
+<p>Run test and see the result like this</p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><span class="o">[</span> PASS <span class="o">]</span>  __tests__/ShowComponent-test.js <span class="o">(</span>0.681s<span class="o">)</span></code></pre></figure>
+
+<p>We can also test with user action. Let’s create an component <strong>ActionComponent.js</strong> like this</p>
+
+<figure class="highlight"><pre><code class="language-js" data-lang="js"><span class="s1">'use strict'</span><span class="p">;</span>
+
+<span class="kr">import</span> <span class="nx">React</span><span class="p">,</span> <span class="p">{</span>
+  <span class="nx">Component</span><span class="p">,</span>
+  <span class="nx">StyleSheet</span><span class="p">,</span>
+  <span class="nx">Text</span><span class="p">,</span>
+  <span class="nx">View</span><span class="p">,</span>
+  <span class="nx">TouchableOpacity</span><span class="p">,</span>
+<span class="p">}</span> <span class="nx">from</span> <span class="s1">'react-native'</span><span class="p">;</span>
+
+<span class="kr">class</span> <span class="nx">ActionComponent</span> <span class="kr">extends</span> <span class="nx">Component</span> <span class="p">{</span>
+  <span class="nx">constructor</span><span class="p">(</span><span class="nx">props</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kr">super</span><span class="p">(</span><span class="nx">props</span><span class="p">);</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">state</span> <span class="o">=</span> <span class="p">{</span><span class="na">isOn</span><span class="p">:</span> <span class="kc">false</span><span class="p">};</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">_onPress</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">_onPress</span><span class="p">.</span><span class="nx">bind</span><span class="p">(</span><span class="k">this</span><span class="p">);</span>
+  <span class="p">}</span>
+  <span class="nx">_onPress</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">setState</span><span class="p">({</span><span class="na">isOn</span><span class="p">:</span> <span class="o">!</span><span class="k">this</span><span class="p">.</span><span class="nx">state</span><span class="p">.</span><span class="nx">isOn</span><span class="p">});</span>
+  <span class="p">}</span>
+  <span class="nx">render</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="p">(</span>
+      <span class="o">&lt;</span><span class="nx">View</span> <span class="nx">style</span><span class="o">=</span><span class="p">{</span><span class="nx">styles</span><span class="p">.</span><span class="nx">container</span><span class="p">}</span><span class="o">&gt;</span>
+        <span class="o">&lt;</span><span class="nx">TouchableOpacity</span> <span class="nx">onPress</span><span class="o">=</span><span class="p">{</span><span class="k">this</span><span class="p">.</span><span class="nx">_onPress</span><span class="p">}</span><span class="o">&gt;</span>
+          <span class="o">&lt;</span><span class="nx">Text</span> <span class="nx">style</span><span class="o">=</span><span class="p">{</span><span class="nx">styles</span><span class="p">.</span><span class="nx">button</span><span class="p">}</span><span class="o">&gt;</span>
+            <span class="p">{</span><span class="k">this</span><span class="p">.</span><span class="nx">state</span><span class="p">.</span><span class="nx">isOn</span> <span class="p">?</span> <span class="s2">"On"</span> <span class="p">:</span> <span class="s2">"Off"</span><span class="p">}</span>
+          <span class="o">&lt;</span><span class="sr">/Text&gt;</span><span class="err">
+</span>        <span class="o">&lt;</span><span class="sr">/TouchableOpacity&gt;</span><span class="err">
+</span>      <span class="o">&lt;</span><span class="sr">/View&gt;</span><span class="err">
+</span>    <span class="p">);</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd">var</span> <span class="nx">styles</span> <span class="o">=</span> <span class="nx">StyleSheet</span><span class="p">.</span><span class="nx">create</span><span class="p">({</span>
+  <span class="na">container</span><span class="p">:</span> <span class="p">{</span>
+    <span class="na">alignItems</span><span class="p">:</span> <span class="s1">'center'</span><span class="p">,</span>
+    <span class="na">backgroundColor</span><span class="p">:</span> <span class="s1">'red'</span><span class="p">,</span>
+  <span class="p">},</span>
+  <span class="na">button</span><span class="p">:</span> <span class="p">{</span>
+    <span class="na">fontSize</span><span class="p">:</span> <span class="mi">20</span><span class="p">,</span>
+    <span class="na">textAlign</span><span class="p">:</span> <span class="s1">'center'</span><span class="p">,</span>
+    <span class="na">margin</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
+  <span class="p">},</span>
+<span class="p">});</span>
+
+<span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="nx">ActionComponent</span><span class="p">;</span></code></pre></figure>
+
+<p>And the test file <strong>ActionComponent-test.js</strong> in folder <strong><strong>tests</strong></strong></p>
+
+<figure class="highlight"><pre><code class="language-js" data-lang="js"><span class="s1">'use strict'</span><span class="p">;</span>
+
+<span class="kr">import</span> <span class="nx">React</span><span class="p">,</span> <span class="p">{</span> <span class="nx">Text</span><span class="p">,</span> <span class="nx">TouchableOpacity</span> <span class="p">}</span> <span class="nx">from</span> <span class="s1">'react-native'</span><span class="p">;</span>
+<span class="kr">import</span> <span class="p">{</span> <span class="nx">mount</span> <span class="p">}</span> <span class="nx">from</span> <span class="s1">'enzyme'</span><span class="p">;</span>
+
+<span class="nx">jest</span><span class="p">.</span><span class="nx">unmock</span><span class="p">(</span><span class="s1">'../ActionComponent'</span><span class="p">);</span>
+<span class="kr">const</span> <span class="nx">ActionComponent</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'../ActionComponent'</span><span class="p">);</span>
+
+<span class="nx">describe</span><span class="p">(</span><span class="s1">'&lt;ActionComponent /&gt;'</span><span class="p">,</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="nx">it</span><span class="p">(</span><span class="s1">'Component response to user action'</span><span class="p">,</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="c1">// Full DOM rendering
+</span>
+    <span class="kr">const</span> <span class="nx">wrapper</span> <span class="o">=</span> <span class="nx">mount</span><span class="p">(</span><span class="o">&lt;</span><span class="nx">ActionComponent</span> <span class="o">/&gt;</span><span class="p">);</span>
+    <span class="nx">expect</span><span class="p">(</span><span class="nx">wrapper</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="nx">Text</span><span class="p">).</span><span class="nx">text</span><span class="p">()).</span><span class="nx">toBe</span><span class="p">(</span><span class="s1">'Off'</span><span class="p">);</span>
+    <span class="c1">// Simulate user tap
+</span>
+    <span class="nx">wrapper</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="nx">TouchableOpacity</span><span class="p">).</span><span class="nx">simulate</span><span class="p">(</span><span class="s1">'click'</span><span class="p">);</span>
+    <span class="nx">expect</span><span class="p">(</span><span class="nx">wrapper</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="nx">Text</span><span class="p">).</span><span class="nx">text</span><span class="p">()).</span><span class="nx">toBe</span><span class="p">(</span><span class="s1">'On'</span><span class="p">);</span>
+  <span class="p">});</span>
+<span class="p">});</span></code></pre></figure>
+
+<p>Now, run the test and see the result</p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><span class="o">[</span> PASS <span class="o">]</span>  __tests__/ActionComponent-test.js <span class="o">(</span>0.684s<span class="o">)</span></code></pre></figure>
+
+<h2>
+  <a class="anchor" name="conclusion"></a> Conclusion <a class="hash-link" href="#conclusion">#</a>
+</h2>
+<p>I am looking at my testing code, it’s shorter and clearer. These tools help me to save my time. I hope it saves your time too. If you don’t want to type the code from this tutorial, just checkout from <a href="https://github.com/apentle/react-native-babel-jest/blob/master/Example/README.md" target="_blank">github</a>.
+Thank you!</p>
+
+  </div>
+  
+  <div class="post">
+    <h1 class="post-title">
+      <a href="/react-native-testing-component-action">
+        React Native Testing: Function, Component and Action
+      </a>
+    </h1>
+
+    <span class="post-date">04 May 2016</span>
+
+    <p><img src="/public/2016/05/react-native-testing.jpg" alt="React Native Testing: Function, Component and Action" /></p>
+
+<p>Testing is one of the most important parts in programming. You might need to test the function, component, action… Or you might use <a href="https://en.wikipedia.org/wiki/Behavior-driven_development" target="_blank">BDD</a>/<a href="https://en.m.wikipedia.org/wiki/Test-driven_development" target="_blank">TDD</a> to develop your app. This tutorial will help you to solve these problems, write the react native testing, step by step. Here we go!</p>
+
+<h2>
+  <a class="anchor" name="jest-tests"></a> Jest Tests <a class="hash-link" href="#jest-tests">#</a>
+</h2>
+<p><a href="https://facebook.github.io/jest/" target="_blank">Jest</a> tests are JS-only tests run on the command line with node. At first, we need to install it by command.</p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell">npm i --save-dev jest-cli</code></pre></figure>
+
+<p>Add the code below to your <strong>package.json</strong> file.</p>
+
+<figure class="highlight"><pre><code class="language-js" data-lang="js"><span class="s2">"scripts"</span><span class="err">:</span> <span class="p">{</span>
+  <span class="s2">"test"</span><span class="err">:</span> <span class="s2">"jest"</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>Now, you can run the testing with command.</p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell">npm <span class="nb">test</span></code></pre></figure>
+
+<p>This may output with “No tests found” message. We will write a sample function to test. Let’s make a file <strong>square.js</strong></p>
+
+<figure class="highlight"><pre><code class="language-js" data-lang="js"><span class="kd">function</span> <span class="nx">square</span><span class="p">(</span><span class="nx">x</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="nx">x</span> <span class="o">*</span> <span class="nx">x</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="nx">square</span><span class="p">;</span></code></pre></figure>
+
+<p>And make a test file <strong>square-test.js</strong> in folder <strong><strong>tests</strong></strong></p>
+
+<figure class="highlight"><pre><code class="language-js" data-lang="js"><span class="nx">jest</span><span class="p">.</span><span class="nx">unmock</span><span class="p">(</span><span class="s1">'../square'</span><span class="p">);</span>
+
+<span class="nx">describe</span><span class="p">(</span><span class="s1">'square'</span><span class="p">,</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="nx">it</span><span class="p">(</span><span class="s1">'3 square to equal 9'</span><span class="p">,</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="kr">const</span> <span class="nx">square</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'../square'</span><span class="p">);</span>
+    <span class="nx">expect</span><span class="p">(</span><span class="nx">square</span><span class="p">(</span><span class="mi">3</span><span class="p">)).</span><span class="nx">toEqual</span><span class="p">(</span><span class="mi">9</span><span class="p">);</span>
+  <span class="p">});</span>
+<span class="p">});</span></code></pre></figure>
+
+<p>Run the testing command, you will see the output.</p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><span class="o">[</span> PASS <span class="o">]</span>  __tests__/square-test.js <span class="o">(</span>0.036s<span class="o">)</span></code></pre></figure>
+
+<p>Now, you know how to create an Jest test.</p>
+
+<h2>
+  <a class="anchor" name="testing-component"></a> React Native Testing Component <a class="hash-link" href="#testing-component">#</a>
+</h2>
+<p>To test a React Native component, we will use the <strong>React</strong> library to render component. We also use <strong>babel</strong> to transform our component code while testing. At first, we need to install it.</p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell">npm i --save-dev babel-core babel-preset-jest babel-preset-es2015 babel-preset-react</code></pre></figure>
+
+<p>Create a custom preprocessor called <strong>preprocessor.js</strong> to process testing for react native</p>
+
+<figure class="highlight"><pre><code class="language-js" data-lang="js"><span class="s1">'use strict'</span><span class="p">;</span>
+
+<span class="kr">const</span> <span class="nx">babel</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'babel-core'</span><span class="p">);</span>
+<span class="kr">const</span> <span class="nx">jestPreset</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'babel-preset-jest'</span><span class="p">);</span>
+<span class="kr">const</span> <span class="nx">es2015Preset</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'babel-preset-es2015'</span><span class="p">);</span>
+<span class="kr">const</span> <span class="nx">reactPreset</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'babel-preset-react'</span><span class="p">);</span>
+
+<span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="nx">process</span><span class="p">(</span><span class="nx">src</span><span class="p">,</span> <span class="nx">filename</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">babel</span><span class="p">.</span><span class="nx">util</span><span class="p">.</span><span class="nx">canCompile</span><span class="p">(</span><span class="nx">filename</span><span class="p">))</span> <span class="p">{</span>
+      <span class="k">return</span> <span class="nx">babel</span><span class="p">.</span><span class="nx">transform</span><span class="p">(</span><span class="nx">src</span><span class="p">,</span> <span class="p">{</span>
+        <span class="na">auxiliaryCommentBefore</span><span class="p">:</span> <span class="s1">' istanbul ignore next '</span><span class="p">,</span>
+        <span class="nx">filename</span><span class="p">,</span>
+        <span class="na">presets</span><span class="p">:</span> <span class="p">[</span><span class="nx">jestPreset</span><span class="p">,</span> <span class="nx">es2015Preset</span><span class="p">,</span> <span class="nx">reactPreset</span><span class="p">],</span>
+        <span class="na">retainLines</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+      <span class="p">}).</span><span class="nx">code</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="nx">src</span><span class="p">;</span>
+  <span class="p">},</span>
+<span class="p">};</span></code></pre></figure>
+
+<p>Configure the Jest by add code below to <strong>package.json</strong></p>
+
+<figure class="highlight"><pre><code class="language-js" data-lang="js"><span class="p">{</span>
+  <span class="s2">"jest"</span><span class="err">:</span> <span class="p">{</span>
+    <span class="s2">"scriptPreprocessor"</span><span class="err">:</span> <span class="s2">"&lt;rootDir&gt;/preprocessor.js"</span><span class="p">,</span>
+    <span class="s2">"setupEnvScriptFile"</span><span class="err">:</span> <span class="s2">"node_modules/react-native/jestSupport/env.js"</span><span class="p">,</span>
+    <span class="s2">"testPathIgnorePatterns"</span><span class="err">:</span> <span class="p">[</span>
+      <span class="s2">"/node_modules/"</span>
+    <span class="p">],</span>
+    <span class="s2">"testFileExtensions"</span><span class="err">:</span> <span class="p">[</span>
+      <span class="s2">"js"</span>
+    <span class="p">],</span>
+    <span class="s2">"unmockedModulePathPatterns"</span><span class="err">:</span> <span class="p">[</span>
+      <span class="s2">"react"</span><span class="p">,</span>
+      <span class="s2">"promise"</span><span class="p">,</span>
+      <span class="s2">"source-map"</span>
+    <span class="p">]</span>
+  <span class="p">}</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>React Native Component does not render to HTML DOM. So, we need a mock to do that. Create file <strong>react-native.js</strong> in folder <strong><strong>mocks</strong></strong></p>
+
+<figure class="highlight"><pre><code class="language-js" data-lang="js"><span class="s1">'use strict'</span><span class="p">;</span>
+
+<span class="kr">const</span> <span class="nx">React</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'react'</span><span class="p">);</span>
+<span class="kr">const</span> <span class="nx">ReactNative</span> <span class="o">=</span> <span class="nx">React</span><span class="p">;</span>
+
+<span class="c1">// Simulate style creator
+</span>
+<span class="nx">ReactNative</span><span class="p">.</span><span class="nx">StyleSheet</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="na">create</span><span class="p">:</span> <span class="kd">function</span> <span class="nx">create</span><span class="p">(</span><span class="nx">styles</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">return</span> <span class="nx">styles</span><span class="p">;</span>
+  <span class="p">}</span>
+<span class="p">};</span>
+
+<span class="c1">// Create react native component helper
+</span>
+<span class="kr">const</span> <span class="nx">NativeComponent</span> <span class="o">=</span> <span class="p">(</span><span class="nx">type</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="nx">React</span><span class="p">.</span><span class="nx">createClass</span><span class="p">({</span>
+    <span class="nx">render</span><span class="p">()</span> <span class="p">{</span>
+      <span class="kd">var</span> <span class="nx">properties</span> <span class="o">=</span> <span class="p">{</span><span class="na">className</span><span class="p">:</span> <span class="nx">type</span><span class="p">};</span>
+      <span class="k">if</span> <span class="p">(</span><span class="k">typeof</span> <span class="k">this</span><span class="p">.</span><span class="nx">props</span><span class="p">.</span><span class="nx">onPress</span> <span class="o">!==</span> <span class="s1">'undefined'</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">properties</span><span class="p">.</span><span class="nx">onClick</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">props</span><span class="p">.</span><span class="nx">onPress</span><span class="p">;</span>
+      <span class="p">}</span>
+      <span class="nb">Object</span><span class="p">.</span><span class="nx">assign</span><span class="p">(</span><span class="nx">properties</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">props</span><span class="p">);</span>
+      <span class="k">return</span> <span class="p">(</span>
+        <span class="o">&lt;</span><span class="nx">div</span> <span class="p">{...</span><span class="nx">properties</span><span class="p">}</span><span class="o">&gt;</span><span class="p">{</span><span class="k">this</span><span class="p">.</span><span class="nx">props</span><span class="p">.</span><span class="nx">children</span><span class="p">}</span><span class="o">&lt;</span><span class="sr">/div&gt;</span><span class="err">
+</span>      <span class="p">);</span>
+    <span class="p">}</span>
+  <span class="p">});</span>
+<span class="p">};</span>
+
+<span class="c1">// Specific to list view
+</span>
+<span class="kr">class</span> <span class="nx">ListView</span> <span class="kr">extends</span> <span class="nx">React</span><span class="p">.</span><span class="nx">Component</span> <span class="p">{</span>
+  <span class="kr">static</span> <span class="nx">DataSource</span><span class="p">()</span> <span class="p">{</span>
+  <span class="p">}</span>
+  <span class="nx">render</span><span class="p">()</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">properties</span> <span class="o">=</span> <span class="p">{</span><span class="na">className</span><span class="p">:</span> <span class="s2">"ListView"</span><span class="p">};</span>
+    <span class="nb">Object</span><span class="p">.</span><span class="nx">assign</span><span class="p">(</span><span class="nx">properties</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">props</span><span class="p">);</span>
+    <span class="k">return</span> <span class="p">(</span>
+      <span class="o">&lt;</span><span class="nx">div</span> <span class="p">{...</span><span class="nx">properties</span><span class="p">}</span><span class="o">&gt;</span><span class="p">{</span><span class="k">this</span><span class="p">.</span><span class="nx">props</span><span class="p">.</span><span class="nx">children</span><span class="p">}</span><span class="o">&lt;</span><span class="sr">/div&gt;</span><span class="err">
+</span>    <span class="p">);</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c1">// App Registry
+</span>
+<span class="kr">class</span> <span class="nx">AppRegistry</span> <span class="p">{</span>
+  <span class="kr">static</span> <span class="nx">registerComponent</span> <span class="p">()</span> <span class="p">{</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="nx">ReactNative</span><span class="p">.</span><span class="nx">View</span> <span class="o">=</span> <span class="nx">NativeComponent</span><span class="p">(</span><span class="s2">"View"</span><span class="p">);</span>
+<span class="nx">ReactNative</span><span class="p">.</span><span class="nx">ScrollView</span> <span class="o">=</span> <span class="nx">NativeComponent</span><span class="p">(</span><span class="s2">"ScrollView"</span><span class="p">);</span>
+<span class="nx">ReactNative</span><span class="p">.</span><span class="nx">Text</span> <span class="o">=</span> <span class="nx">NativeComponent</span><span class="p">(</span><span class="s2">"Text"</span><span class="p">);</span>
+<span class="nx">ReactNative</span><span class="p">.</span><span class="nx">TouchableOpacity</span> <span class="o">=</span> <span class="nx">NativeComponent</span><span class="p">(</span><span class="s2">"TouchableOpacity"</span><span class="p">);</span>
+<span class="nx">ReactNative</span><span class="p">.</span><span class="nx">TouchableHighlight</span> <span class="o">=</span> <span class="nx">NativeComponent</span><span class="p">(</span><span class="s2">"TouchableHighlight"</span><span class="p">);</span>
+<span class="nx">ReactNative</span><span class="p">.</span><span class="nx">TouchableWithoutFeedback</span> <span class="o">=</span> <span class="nx">NativeComponent</span><span class="p">(</span><span class="s2">"TouchableWithoutFeedback"</span><span class="p">);</span>
+<span class="nx">ReactNative</span><span class="p">.</span><span class="nx">TouchableNativeFeedback</span> <span class="o">=</span> <span class="nx">NativeComponent</span><span class="p">(</span><span class="s2">"TouchableNativeFeedback"</span><span class="p">);</span>
+<span class="nx">ReactNative</span><span class="p">.</span><span class="nx">ToolbarAndroid</span> <span class="o">=</span> <span class="nx">NativeComponent</span><span class="p">(</span><span class="s2">"ToolbarAndroid"</span><span class="p">);</span>
+<span class="nx">ReactNative</span><span class="p">.</span><span class="nx">Image</span> <span class="o">=</span> <span class="nx">NativeComponent</span><span class="p">(</span><span class="s2">"Image"</span><span class="p">);</span>
+<span class="c1">// Add more... if you needed
+</span>
+
+<span class="nx">ReactNative</span><span class="p">.</span><span class="nx">ListView</span> <span class="o">=</span> <span class="nx">ListView</span><span class="p">;</span>
+<span class="nx">ReactNative</span><span class="p">.</span><span class="nx">AppRegistry</span> <span class="o">=</span> <span class="nx">AppRegistry</span><span class="p">;</span>
+
+<span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="nx">ReactNative</span><span class="p">;</span></code></pre></figure>
+
+<p>Let’s create a show text component <strong>ShowComponent.js</strong></p>
+
+<figure class="highlight"><pre><code class="language-js" data-lang="js"><span class="s1">'use strict'</span><span class="p">;</span>
+
+<span class="kr">import</span> <span class="nx">React</span><span class="p">,</span> <span class="p">{</span>
+  <span class="nx">Component</span><span class="p">,</span>
+  <span class="nx">StyleSheet</span><span class="p">,</span>
+  <span class="nx">Text</span><span class="p">,</span>
+  <span class="nx">View</span><span class="p">,</span>
+<span class="p">}</span> <span class="nx">from</span> <span class="s1">'react-native'</span><span class="p">;</span>
+
+<span class="kr">class</span> <span class="nx">ShowComponent</span> <span class="kr">extends</span> <span class="nx">Component</span> <span class="p">{</span>
+  <span class="nx">render</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="p">(</span>
+      <span class="o">&lt;</span><span class="nx">View</span> <span class="nx">style</span><span class="o">=</span><span class="p">{</span><span class="nx">styles</span><span class="p">.</span><span class="nx">container</span><span class="p">}</span><span class="o">&gt;</span>
+        <span class="o">&lt;</span><span class="nx">Text</span> <span class="nx">style</span><span class="o">=</span><span class="p">{</span><span class="nx">styles</span><span class="p">.</span><span class="nx">show</span><span class="p">}</span><span class="o">&gt;</span>
+          <span class="nx">Show</span> <span class="nx">Text</span>
+        <span class="o">&lt;</span><span class="sr">/Text&gt;</span><span class="err">
+</span>      <span class="o">&lt;</span><span class="sr">/View&gt;</span><span class="err">
+</span>    <span class="p">);</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd">var</span> <span class="nx">styles</span> <span class="o">=</span> <span class="nx">StyleSheet</span><span class="p">.</span><span class="nx">create</span><span class="p">({</span>
+  <span class="na">container</span><span class="p">:</span> <span class="p">{</span>
+    <span class="na">alignItems</span><span class="p">:</span> <span class="s1">'center'</span><span class="p">,</span>
+  <span class="p">},</span>
+  <span class="na">show</span><span class="p">:</span> <span class="p">{</span>
+    <span class="na">fontSize</span><span class="p">:</span> <span class="mi">20</span><span class="p">,</span>
+    <span class="na">textAlign</span><span class="p">:</span> <span class="s1">'center'</span><span class="p">,</span>
+    <span class="na">margin</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
+  <span class="p">},</span>
+<span class="p">});</span>
+
+<span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="nx">ShowComponent</span><span class="p">;</span></code></pre></figure>
+
+<p>Then create the test file <strong>ShowComponent-test.js</strong> in folder <strong><strong>tests</strong></strong></p>
+
+<figure class="highlight"><pre><code class="language-js" data-lang="js"><span class="s1">'use strict'</span><span class="p">;</span>
+
+<span class="kr">const</span> <span class="nx">React</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'react-native'</span><span class="p">);</span>
+<span class="kr">const</span> <span class="p">{</span> <span class="nx">View</span> <span class="p">}</span> <span class="o">=</span> <span class="nx">React</span><span class="p">;</span>
+<span class="kr">const</span> <span class="nx">TestUtils</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'react/lib/ReactTestUtils'</span><span class="p">);</span>
+
+<span class="nx">jest</span><span class="p">.</span><span class="nx">unmock</span><span class="p">(</span><span class="s1">'../ShowComponent'</span><span class="p">);</span>
+<span class="kr">const</span> <span class="nx">ShowComponent</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'../ShowComponent'</span><span class="p">);</span>
+
+<span class="nx">describe</span><span class="p">(</span><span class="s1">'&lt;ShowComponent /&gt;'</span><span class="p">,</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="nx">it</span><span class="p">(</span><span class="s1">'Component must show "Show Text"'</span><span class="p">,</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="c1">// Shallow rendering
+</span>
+    <span class="kr">const</span> <span class="nx">renderer</span> <span class="o">=</span> <span class="nx">TestUtils</span><span class="p">.</span><span class="nx">createRenderer</span><span class="p">();</span>
+    <span class="nx">renderer</span><span class="p">.</span><span class="nx">render</span><span class="p">(</span><span class="o">&lt;</span><span class="nx">ShowComponent</span> <span class="o">/&gt;</span><span class="p">);</span>
+    <span class="kd">let</span> <span class="nx">output</span> <span class="o">=</span> <span class="nx">renderer</span><span class="p">.</span><span class="nx">getRenderOutput</span><span class="p">();</span>
+    <span class="nx">expect</span><span class="p">(</span><span class="nx">output</span><span class="p">.</span><span class="nx">type</span><span class="p">).</span><span class="nx">toBe</span><span class="p">(</span><span class="nx">View</span><span class="p">);</span>
+    <span class="c1">// Deep render to DOM
+</span>
+    <span class="kr">const</span> <span class="nx">dom</span> <span class="o">=</span> <span class="nx">TestUtils</span><span class="p">.</span><span class="nx">renderIntoDocument</span><span class="p">(</span><span class="o">&lt;</span><span class="nx">ShowComponent</span> <span class="o">/&gt;</span><span class="p">);</span>
+    <span class="kr">const</span> <span class="nx">txtNode</span> <span class="o">=</span> <span class="nx">TestUtils</span><span class="p">.</span><span class="nx">findRenderedDOMComponentWithClass</span><span class="p">(</span><span class="nx">dom</span><span class="p">,</span> <span class="s1">'Text'</span><span class="p">);</span>
+    <span class="nx">expect</span><span class="p">(</span><span class="nx">txtNode</span><span class="p">.</span><span class="nx">textContent</span><span class="p">).</span><span class="nx">toBe</span><span class="p">(</span><span class="s1">'Show Text'</span><span class="p">);</span>
+  <span class="p">});</span>
+<span class="p">});</span></code></pre></figure>
+
+<p>Run the test command</p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell">npm <span class="nb">test</span></code></pre></figure>
+
+<p>And see the test result</p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><span class="o">[</span> PASS <span class="o">]</span>  __tests__/ShowComponent-test.js <span class="o">(</span>0.548s<span class="o">)</span></code></pre></figure>
+
+<h2>
+  <a class="anchor" name="testing-action"></a> React Native Testing Action <a class="hash-link" href="#testing-action">#</a>
+</h2>
+<p>React testing utility provide a “Simulate” to help us simulating the user actions. However, some of the actions in react native does not exist on “Simulate”. We need to mock it before testing, look at the <strong><strong>mocks</strong>/react-native.js</strong></p>
+
+<figure class="highlight"><pre><code class="language-js" data-lang="js"><span class="k">if</span> <span class="p">(</span><span class="k">typeof</span> <span class="k">this</span><span class="p">.</span><span class="nx">props</span><span class="p">.</span><span class="nx">onPress</span> <span class="o">!==</span> <span class="s1">'undefined'</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">properties</span><span class="p">.</span><span class="nx">onClick</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">props</span><span class="p">.</span><span class="nx">onPress</span><span class="p">;</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>The code above helps us to match <strong>onPress</strong> on react native with <strong>onClick</strong> on “Simulate”.
+Let’s create an action component <strong>ActionComponent.js</strong></p>
+
+<figure class="highlight"><pre><code class="language-js" data-lang="js"><span class="s1">'use strict'</span><span class="p">;</span>
+
+<span class="kr">import</span> <span class="nx">React</span><span class="p">,</span> <span class="p">{</span>
+  <span class="nx">Component</span><span class="p">,</span>
+  <span class="nx">StyleSheet</span><span class="p">,</span>
+  <span class="nx">Text</span><span class="p">,</span>
+  <span class="nx">View</span><span class="p">,</span>
+  <span class="nx">TouchableOpacity</span><span class="p">,</span>
+<span class="p">}</span> <span class="nx">from</span> <span class="s1">'react-native'</span><span class="p">;</span>
+
+<span class="kr">class</span> <span class="nx">ActionComponent</span> <span class="kr">extends</span> <span class="nx">Component</span> <span class="p">{</span>
+  <span class="nx">constructor</span><span class="p">(</span><span class="nx">props</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kr">super</span><span class="p">(</span><span class="nx">props</span><span class="p">);</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">state</span> <span class="o">=</span> <span class="p">{</span><span class="na">isOn</span><span class="p">:</span> <span class="kc">false</span><span class="p">};</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">_onPress</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">_onPress</span><span class="p">.</span><span class="nx">bind</span><span class="p">(</span><span class="k">this</span><span class="p">);</span>
+  <span class="p">}</span>
+  <span class="nx">_onPress</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">setState</span><span class="p">({</span><span class="na">isOn</span><span class="p">:</span> <span class="o">!</span><span class="k">this</span><span class="p">.</span><span class="nx">state</span><span class="p">.</span><span class="nx">isOn</span><span class="p">});</span>
+  <span class="p">}</span>
+  <span class="nx">render</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="p">(</span>
+      <span class="o">&lt;</span><span class="nx">View</span> <span class="nx">style</span><span class="o">=</span><span class="p">{</span><span class="nx">styles</span><span class="p">.</span><span class="nx">container</span><span class="p">}</span><span class="o">&gt;</span>
+        <span class="o">&lt;</span><span class="nx">TouchableOpacity</span> <span class="nx">onPress</span><span class="o">=</span><span class="p">{</span><span class="k">this</span><span class="p">.</span><span class="nx">_onPress</span><span class="p">}</span><span class="o">&gt;</span>
+          <span class="o">&lt;</span><span class="nx">Text</span> <span class="nx">style</span><span class="o">=</span><span class="p">{</span><span class="nx">styles</span><span class="p">.</span><span class="nx">button</span><span class="p">}</span><span class="o">&gt;</span>
+            <span class="p">{</span><span class="k">this</span><span class="p">.</span><span class="nx">state</span><span class="p">.</span><span class="nx">isOn</span> <span class="p">?</span> <span class="s2">"On"</span> <span class="p">:</span> <span class="s2">"Off"</span><span class="p">}</span>
+          <span class="o">&lt;</span><span class="sr">/Text&gt;</span><span class="err">
+</span>        <span class="o">&lt;</span><span class="sr">/TouchableOpacity&gt;</span><span class="err">
+</span>      <span class="o">&lt;</span><span class="sr">/View&gt;</span><span class="err">
+</span>    <span class="p">);</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd">var</span> <span class="nx">styles</span> <span class="o">=</span> <span class="nx">StyleSheet</span><span class="p">.</span><span class="nx">create</span><span class="p">({</span>
+  <span class="na">container</span><span class="p">:</span> <span class="p">{</span>
+    <span class="na">alignItems</span><span class="p">:</span> <span class="s1">'center'</span><span class="p">,</span>
+    <span class="na">backgroundColor</span><span class="p">:</span> <span class="s1">'red'</span><span class="p">,</span>
+  <span class="p">},</span>
+  <span class="na">button</span><span class="p">:</span> <span class="p">{</span>
+    <span class="na">fontSize</span><span class="p">:</span> <span class="mi">20</span><span class="p">,</span>
+    <span class="na">textAlign</span><span class="p">:</span> <span class="s1">'center'</span><span class="p">,</span>
+    <span class="na">margin</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
+  <span class="p">},</span>
+<span class="p">});</span>
+
+<span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="nx">ActionComponent</span><span class="p">;</span></code></pre></figure>
+
+<p>And the test file <strong>ActionComponent-test.js</strong> in folder <strong><strong>tests</strong></strong></p>
+
+<figure class="highlight"><pre><code class="language-js" data-lang="js"><span class="s1">'use strict'</span><span class="p">;</span>
+
+<span class="kr">const</span> <span class="nx">React</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'react-native'</span><span class="p">);</span>
+<span class="kr">const</span> <span class="nx">TestUtils</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'react/lib/ReactTestUtils'</span><span class="p">);</span>
+
+<span class="nx">jest</span><span class="p">.</span><span class="nx">unmock</span><span class="p">(</span><span class="s1">'../ActionComponent'</span><span class="p">);</span>
+<span class="kr">const</span> <span class="nx">ActionComponent</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'../ActionComponent'</span><span class="p">);</span>
+
+<span class="nx">describe</span><span class="p">(</span><span class="s1">'&lt;ActionComponent /&gt;'</span><span class="p">,</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="nx">it</span><span class="p">(</span><span class="s1">'Component response to user action'</span><span class="p">,</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="c1">// Deep render to DOM
+</span>
+    <span class="kr">const</span> <span class="nx">dom</span> <span class="o">=</span> <span class="nx">TestUtils</span><span class="p">.</span><span class="nx">renderIntoDocument</span><span class="p">(</span><span class="o">&lt;</span><span class="nx">ActionComponent</span> <span class="o">/&gt;</span><span class="p">);</span>
+    <span class="kr">const</span> <span class="nx">txtNode</span> <span class="o">=</span> <span class="nx">TestUtils</span><span class="p">.</span><span class="nx">findRenderedDOMComponentWithClass</span><span class="p">(</span><span class="nx">dom</span><span class="p">,</span> <span class="s1">'Text'</span><span class="p">);</span>
+    <span class="nx">expect</span><span class="p">(</span><span class="nx">txtNode</span><span class="p">.</span><span class="nx">textContent</span><span class="p">).</span><span class="nx">toBe</span><span class="p">(</span><span class="s1">'Off'</span><span class="p">);</span>
+    <span class="c1">// Simulate user tap
+</span>
+    <span class="nx">TestUtils</span><span class="p">.</span><span class="nx">Simulate</span><span class="p">.</span><span class="nx">click</span><span class="p">(</span><span class="nx">TestUtils</span><span class="p">.</span><span class="nx">findRenderedDOMComponentWithClass</span><span class="p">(</span><span class="nx">dom</span><span class="p">,</span> <span class="s1">'TouchableOpacity'</span><span class="p">));</span>
+    <span class="nx">expect</span><span class="p">(</span><span class="nx">txtNode</span><span class="p">.</span><span class="nx">textContent</span><span class="p">).</span><span class="nx">toBe</span><span class="p">(</span><span class="s1">'On'</span><span class="p">);</span>
+  <span class="p">});</span>
+<span class="p">});</span></code></pre></figure>
+
+<p>Then run the test and see the result.</p>
+
+<h2>
+  <a class="anchor" name="conclusion"></a> Conclusion <a class="hash-link" href="#conclusion">#</a>
+</h2>
+<p>This tutorial is a little long. And I hope it is helpful for you to deal with react native testing.
+I put all these code together on <a href="https://github.com/apentle/react-native-testing-example" target="_blank">this repository</a>. You can check it out and run your own.
+Thank you!</p>
+
+  </div>
+  
+  <div class="post">
+    <h1 class="post-title">
+      <a href="/what-happens-inside-react-native">
+        What happens inside React Native
+      </a>
+    </h1>
+
+    <span class="post-date">30 Mar 2016</span>
+
+    <p><img src="/public/2016/03/inside-react-native.jpg" alt="What happens inside React Native" /></p>
+
+<p>In the <a href="/getting-started-react-native/">previous post</a>, we built “Hello World” app and learned some JavaScript code using React Native platform. But what happens in the low level code, in your native project? This tutorial will take a look into it.</p>
+
+<h2>Work with JavaScript Server</h2>
+<p>React Native allows you to debug your JavaScript code instantly when you make a change without rebuild your app. Because it provides two ways to load JavaScript code. The fist one, it loads from an external server. So you can change your code and then tell React Native to reload it. The second one is from app’s bundle. This option is usually used for production version. Look at the file <strong>AppDelegate.m</strong> in your iOS project, you will see some lines of code like this.</p>
+
+<figure class="highlight"><pre><code class="language-objc" data-lang="objc"><span class="n">NSURL</span> <span class="o">*</span><span class="n">jsCodeLocation</span><span class="p">;</span>
+
+<span class="cm">/**
+ - Loading JavaScript code - uncomment the one you want.
+ *
+ - OPTION 1
+ - Load from development server. Start the server from the repository root:
+ *
+ - $ npm start
+ *
+ - To run on device, change `localhost` to the IP address of your computer
+ - (you can get this by typing `ifconfig` into the terminal and selecting the
+ - `inet` value under `en0:`) and make sure your computer and iOS device are
+ - on the same Wi-Fi network.
+ */</span>
+
+<span class="n">jsCodeLocation</span> <span class="o">=</span> <span class="p">[</span><span class="n">NSURL</span> <span class="nf">URLWithString</span><span class="p">:</span><span class="s">@"http://localhost:8081/index.ios.bundle?platform=ios&amp;dev=true"</span><span class="p">];</span>
+
+<span class="cm">/**
+ - OPTION 2
+ - Load from pre-bundled file on disk. The static bundle is automatically
+ - generated by "Bundle React Native code and images" build step.
+ */</span>
+
+<span class="c1">// jsCodeLocation = [[NSBundle mainBundle] URLForResource:@"main" withExtension:@"jsbundle"];
+</span>
+<span class="n">RCTRootView</span> <span class="o">*</span><span class="n">rootView</span> <span class="o">=</span> <span class="p">[[</span><span class="n">RCTRootView</span> <span class="nf">alloc</span><span class="p">]</span> <span class="nf">initWithBundleURL</span><span class="p">:</span><span class="n">jsCodeLocation</span>
+                                                    <span class="nf">moduleName</span><span class="p">:</span><span class="s">@"HelloWorld"</span>
+                                             <span class="n">initialProperties</span><span class="o">:</span><span class="nb">nil</span>
+                                                 <span class="n">launchOptions</span><span class="o">:</span><span class="n">launchOptions</span><span class="p">];</span>
+
+<span class="n">self</span><span class="p">.</span><span class="n">window</span> <span class="o">=</span> <span class="p">[[</span><span class="n">UIWindow</span> <span class="nf">alloc</span><span class="p">]</span> <span class="nf">initWithFrame</span><span class="p">:[</span><span class="n">UIScreen</span> <span class="nf">mainScreen</span><span class="p">].</span><span class="n">bounds</span><span class="p">];</span>
+<span class="n">UIViewController</span> <span class="o">*</span><span class="n">rootViewController</span> <span class="o">=</span> <span class="p">[</span><span class="n">UIViewController</span> <span class="nf">new</span><span class="p">];</span>
+<span class="n">rootViewController</span><span class="p">.</span><span class="n">view</span> <span class="o">=</span> <span class="n">rootView</span><span class="p">;</span>
+<span class="n">self</span><span class="p">.</span><span class="n">window</span><span class="p">.</span><span class="n">rootViewController</span> <span class="o">=</span> <span class="n">rootViewController</span><span class="p">;</span>
+<span class="p">[</span><span class="n">self</span><span class="p">.</span><span class="n">window</span> <span class="nf">makeKeyAndVisible</span><span class="p">];</span>
+<span class="k">return</span> <span class="nb">YES</span><span class="p">;</span></code></pre></figure>
+
+<p>Before release your app, make sure you are using JavaScript from app’s resource. It’s very important!</p>
+
+<h2>React Native connects JavaScript and Native Code</h2>
+<p>Look deeper inside the code of React Native, we will learn how to make a native component works on JavaScript environment. The easiest way is to look into an React Native component. We have two Objective-C files.</p>
+
+<figure class="highlight"><pre><code class="language-objc" data-lang="objc"><span class="cp">#import "RCTBridgeModule.h"
+</span>
+<span class="k">@interface</span> <span class="nc">RCTVibration</span> <span class="p">:</span> <span class="nc">NSObject</span> <span class="o">&lt;</span><span class="n">RCTBridgeModule</span><span class="o">&gt;</span>
+<span class="k">@end</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-objc" data-lang="objc"><span class="cp">#import "RCTVibration.h"
+#import &lt;AudioToolbox/AudioToolbox.h&gt;
+</span>
+<span class="k">@implementation</span> <span class="nc">RCTVibration</span>
+
+<span class="n">RCT_EXPORT_MODULE</span><span class="p">()</span>
+
+<span class="n">RCT_EXPORT_METHOD</span><span class="p">(</span><span class="n">vibrate</span><span class="p">)</span>
+<span class="p">{</span>
+  <span class="n">AudioServicesPlaySystemSound</span><span class="p">(</span><span class="n">kSystemSoundID_Vibrate</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="k">@end</span></code></pre></figure>
+
+<p>We can see two macros in here. <strong>RCT_EXPORT_MODULE</strong> will export your class to React Native module. And <strong>RCT_EXPORT_METHOD</strong> will export your method to React Native method. Then we can use it on JavaScript file.</p>
+
+<figure class="highlight"><pre><code class="language-js" data-lang="js"><span class="s1">'use strict'</span><span class="p">;</span>
+<span class="kr">import</span> <span class="nx">React</span><span class="p">,</span> <span class="p">{</span>
+  <span class="p">...</span>
+  <span class="nx">NativeModules</span><span class="p">,</span>
+<span class="p">}</span> <span class="nx">from</span> <span class="s1">'react-native'</span><span class="p">;</span>
+
+<span class="kr">class</span> <span class="nx">HelloWorld</span> <span class="kr">extends</span> <span class="nx">Component</span> <span class="p">{</span>
+  <span class="nx">render</span><span class="p">()</span> <span class="p">{</span>
+    <span class="c1">// Vibrate on render
+</span>
+    <span class="nx">NativeModules</span><span class="p">.</span><span class="nx">Vibration</span><span class="p">.</span><span class="nx">vibrate</span><span class="p">();</span>
+    <span class="k">return</span> <span class="p">(</span>
+      <span class="p">...</span>
+    <span class="p">);</span>
+  <span class="p">}</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>Press Cmd+R while running your app in Simulator or shake your phone and select “Reload” menu. Then you can see the result.</p>
+
+<h2>JavaScriptCore</h2>
+<p>In this section, I will introduce about a library that makes RCT_EXPORT_MODULE, RCT_EXPORT_METHOD macros work. It’s <a href="https://developer.apple.com/library/ios/documentation/Carbon/Reference/WebKit_JavaScriptCore_Ref/index.html" target="_blank">JavaScriptCore</a> by Apple. It helps us to answer two questions (1)How to run JavaScript in native code? and (2)How to export native code to use in JavaScript?
+With the first question, we will look at two classes: <strong>JSContext</strong> and <strong>JSValue</strong>. JSContext is a JavaScript execution environment, you use a JSContext object to evaluate JavaScript scripts. JSValue is a reference to a JavaScript value, you use a JSValue object to convert value between JavaScript and Objective-C. For example.</p>
+
+<figure class="highlight"><pre><code class="language-objc" data-lang="objc"><span class="n">JSContext</span> <span class="o">*</span><span class="n">context</span> <span class="o">=</span> <span class="p">[[</span><span class="n">JSContext</span> <span class="nf">alloc</span><span class="p">]</span> <span class="nf">init</span><span class="p">];</span>
+<span class="p">[</span><span class="n">context</span> <span class="nf">evaluateScript</span><span class="p">:</span><span class="s">@"var square = function(x) { return x * x }"</span><span class="p">];</span>
+<span class="n">JSValue</span> <span class="o">*</span><span class="n">square</span> <span class="o">=</span> <span class="p">[</span><span class="n">context</span> <span class="nf">evaluateScript</span><span class="p">:</span><span class="s">@"square(10)"</span><span class="p">];</span>
+<span class="n">NSLog</span><span class="p">(</span><span class="s">@"Ten squared: %@"</span><span class="p">,</span> <span class="p">[</span><span class="n">square</span> <span class="nf">toNumber</span><span class="p">]);</span>
+<span class="n">NSLog</span><span class="p">(</span><span class="s">@"String: %@"</span><span class="p">,</span> <span class="p">[</span><span class="n">square</span> <span class="nf">toString</span><span class="p">]);</span></code></pre></figure>
+
+<p>With the second question, we use an Objective-C block to export method for JavaScript. Yes, we will call a native method from JavaScript.</p>
+
+<figure class="highlight"><pre><code class="language-objc" data-lang="objc"><span class="n">context</span><span class="p">[</span><span class="s">@"fullName"</span><span class="p">]</span> <span class="o">=</span> <span class="o">^</span><span class="p">(</span><span class="n">NSString</span> <span class="o">*</span><span class="n">firstName</span><span class="p">,</span> <span class="n">NSString</span> <span class="o">*</span><span class="n">lastName</span><span class="p">){</span>
+  <span class="k">return</span> <span class="p">[</span><span class="n">NSString</span> <span class="nf">stringWithFormat</span><span class="p">:</span><span class="s">@"%@ %@"</span><span class="p">,</span> <span class="n">firstName</span><span class="p">,</span> <span class="n">lastName</span><span class="p">];</span>
+<span class="p">};</span>
+<span class="n">NSLog</span><span class="p">(</span><span class="s">@"My full name: %@"</span><span class="p">,</span> <span class="p">[</span><span class="n">context</span> <span class="nf">evaluateScript</span><span class="p">:</span><span class="s">@"fullName('Doan', 'Nguyen')"</span><span class="p">]);</span></code></pre></figure>
+
+<p>These are very simple codes to make us figure out how React Native works.</p>
+
+<h2>Conclusion</h2>
+<p>Because React Native is an open source framework, we can learn many things from it with source code :). When we use it to build an app, we can use only JavaScript code with many libraries or mix the native and JavaScript code for better performance. Is it a good deal? Let think about it.</p>
+
+  </div>
+  
+  <div class="post">
+    <h1 class="post-title">
+      <a href="/getting-started-react-native">
+        Getting Started with React Native
+      </a>
+    </h1>
+
+    <span class="post-date">22 Mar 2016</span>
+
+    <p>A year ago, Facebook announced <a href="http://facebook.github.io/react-native/">React Native</a>. You can see many hybrid mobile app frameworks as <a href="http://phonegap.com/">PhoneGap</a>, <a href="http://ionicframework.com/">IONIC</a>, <a href="http://mobileangularui.com/">Mobile Angular UI</a> and so on. But what makes React Native different?</p>
+
+<ol>
+  <li>Native components for your app. You won’t see the UIWebView wrapper although you are coding with JavaScript!</li>
+  <li>Styling your app like CSS. Really, you can build the native app with your skill on web developing.</li>
+  <li>Debugging tools instantly on your running app. So you can build and test your UI faster.</li>
+</ol>
+
+<p>Otherwise, React Native also works with your existing native app. And you can write the wrapper to bridge from your native code to React Native JavaScript.
+So, start to learn it? Here we go.</p>
+
+<h2 id="install-react-native">Install React Native</h2>
+<p>This tutorial guides you to install React Native on an OS X computer. At first, we need to install <a href="https://developer.apple.com/xcode/downloads/">Xcode 7.0</a> or higher. It’s also available on <a href="https://itunes.apple.com/en/app/xcode/id497799835?mt=12">App Store</a>.
+And then, we install React Native with this command:</p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell">curl -o- https://raw.githubusercontent.com/apentle/utilities/master/react-native/install | bash</code></pre></figure>
+
+<p>That’s it! Now you can create your own app with React Native. Let’s go.</p>
+
+<h2 id="hello-react-native-app">Hello React Native App</h2>
+<p>Run command to create your own app from terminal. Note that this command will create a project on your current directory.</p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell">react-native init HelloWorld</code></pre></figure>
+
+<p>Then, you can build and run your app on iOS Simulator.</p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><span class="nb">cd </span>HelloWorld
+react-native run-ios</code></pre></figure>
+
+<p>After that, a Node.js server is running in terminal like this.
+<img src="/public/2016/03/react-native-running-server.jpg" alt="React Native Running Server" />
+And Hello World app is running on iOS Simulator. Press Command+D then select Show Inspector. You can debug your UI instantly on running app. Amazing!
+<img src="/public/2016/03/react-native-hello-world.jpg" alt="React Native Hello World" />
+<img src="/public/2016/03/react-native-debugging.jpg" alt="React Native Debugging" />
+Now, we will take a look into the code.</p>
+
+<h2 id="code-structure">Code structure</h2>
+<p>The source code folder of your app will look like this.
+<img src="/public/2016/03/react-project-file-structure.jpg" alt="React Native File Structure" />
+Look into the file <strong>index.ios.js</strong>. These are some pieces of code. In the header, we will see the code line</p>
+
+<figure class="highlight"><pre><code class="language-js" data-lang="js"><span class="s1">'use strict'</span><span class="p">;</span></code></pre></figure>
+
+<p>This line will enable the strict mode in JavaScript. In this mode, you should write your code extractly, all previously accepted “bad syntax” will become to real errors.</p>
+
+<figure class="highlight"><pre><code class="language-js" data-lang="js"><span class="kr">import</span> <span class="nx">React</span><span class="p">,</span> <span class="p">{</span>
+    <span class="nx">AppRegistry</span><span class="p">,</span>
+    <span class="nx">Component</span><span class="p">,</span>
+    <span class="nx">StyleSheet</span><span class="p">,</span>
+    <span class="nx">Text</span><span class="p">,</span>
+    <span class="nx">View</span>
+<span class="p">}</span> <span class="nx">from</span> <span class="s1">'react-native'</span><span class="p">;</span></code></pre></figure>
+
+<p>These lines import React Native’s components the we will use later in this file. Now we take a look into our component.</p>
+
+<figure class="highlight"><pre><code class="language-js" data-lang="js"><span class="kr">class</span> <span class="nx">HelloWorld</span> <span class="kr">extends</span> <span class="nx">Component</span> <span class="p">{</span>
+  <span class="nx">render</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="p">(</span>
+      <span class="o">&lt;</span><span class="nx">View</span> <span class="nx">style</span><span class="o">=</span><span class="p">{</span><span class="nx">styles</span><span class="p">.</span><span class="nx">container</span><span class="p">}</span><span class="o">&gt;</span>
+        <span class="o">&lt;</span><span class="nx">Text</span> <span class="nx">style</span><span class="o">=</span><span class="p">{</span><span class="nx">styles</span><span class="p">.</span><span class="nx">welcome</span><span class="p">}</span><span class="o">&gt;</span>
+          <span class="nx">Welcome</span> <span class="nx">to</span> <span class="nx">React</span> <span class="nx">Native</span><span class="o">!</span>
+        <span class="o">&lt;</span><span class="sr">/Text&gt;</span><span class="err">
+</span>        <span class="o">&lt;</span><span class="nx">Text</span> <span class="nx">style</span><span class="o">=</span><span class="p">{</span><span class="nx">styles</span><span class="p">.</span><span class="nx">instructions</span><span class="p">}</span><span class="o">&gt;</span>
+          <span class="nx">To</span> <span class="nx">get</span> <span class="nx">started</span><span class="p">,</span> <span class="nx">edit</span> <span class="nx">index</span><span class="p">.</span><span class="nx">ios</span><span class="p">.</span><span class="nx">js</span>
+        <span class="o">&lt;</span><span class="sr">/Text&gt;</span><span class="err">
+</span>        <span class="o">&lt;</span><span class="nx">Text</span> <span class="nx">style</span><span class="o">=</span><span class="p">{</span><span class="nx">styles</span><span class="p">.</span><span class="nx">instructions</span><span class="p">}</span><span class="o">&gt;</span>
+          <span class="nx">Press</span> <span class="nx">Cmd</span><span class="o">+</span><span class="nx">R</span> <span class="nx">to</span> <span class="nx">reload</span><span class="p">,{</span><span class="s1">'\n'</span><span class="p">}</span>
+          <span class="nx">Cmd</span><span class="o">+</span><span class="nx">D</span> <span class="nx">or</span> <span class="nx">shake</span> <span class="k">for</span> <span class="nx">dev</span> <span class="nx">menu</span>
+        <span class="o">&lt;</span><span class="sr">/Text&gt;</span><span class="err">
+</span>      <span class="o">&lt;</span><span class="sr">/View&gt;</span><span class="err">
+</span>    <span class="p">);</span>
+  <span class="p">}</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>Our component “HelloWorld” extends from Component. We should focus on its render function. We see the JSX syntax on return command. It’s a JavaScript syntax extension that looks similar to XML. It helps you code your UI like a HTML code! These code also use style attribute for components to render. The style is declared below:</p>
+
+<figure class="highlight"><pre><code class="language-js" data-lang="js"><span class="kr">const</span> <span class="nx">styles</span> <span class="o">=</span> <span class="nx">StyleSheet</span><span class="p">.</span><span class="nx">create</span><span class="p">({</span>
+  <span class="na">container</span><span class="p">:</span> <span class="p">{</span>
+    <span class="na">flex</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="na">justifyContent</span><span class="p">:</span> <span class="s1">'center'</span><span class="p">,</span>
+    <span class="na">alignItems</span><span class="p">:</span> <span class="s1">'center'</span><span class="p">,</span>
+    <span class="na">backgroundColor</span><span class="p">:</span> <span class="s1">'#F5FCFF'</span><span class="p">,</span>
+  <span class="p">},</span>
+  <span class="na">welcome</span><span class="p">:</span> <span class="p">{</span>
+    <span class="na">fontSize</span><span class="p">:</span> <span class="mi">20</span><span class="p">,</span>
+    <span class="na">textAlign</span><span class="p">:</span> <span class="s1">'center'</span><span class="p">,</span>
+    <span class="na">margin</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
+  <span class="p">},</span>
+  <span class="na">instructions</span><span class="p">:</span> <span class="p">{</span>
+    <span class="na">textAlign</span><span class="p">:</span> <span class="s1">'center'</span><span class="p">,</span>
+    <span class="na">color</span><span class="p">:</span> <span class="s1">'#333333'</span><span class="p">,</span>
+    <span class="na">marginBottom</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span>
+  <span class="p">},</span>
+<span class="p">});</span></code></pre></figure>
+
+<p>Yes, it looks quite close to CSS. It makes you easy to build and modify your UI. And the last line of code:</p>
+
+<figure class="highlight"><pre><code class="language-js" data-lang="js"><span class="nx">AppRegistry</span><span class="p">.</span><span class="nx">registerComponent</span><span class="p">(</span><span class="s1">'HelloWorld'</span><span class="p">,</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="nx">HelloWorld</span><span class="p">);</span></code></pre></figure>
+
+<p>This line will register your component with name ‘HelloWorld’, and React Native will use it to run on your native app.
+Now can edit some line on this file and see the result on iOS Simulator by press Command+D. Yes, you don’t need to rebuild your app!</p>
+
+<figure class="highlight"><pre><code class="language-js" data-lang="js">  <span class="nx">render</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="p">(</span>
+      <span class="o">&lt;</span><span class="nx">View</span> <span class="nx">style</span><span class="o">=</span><span class="p">{</span><span class="nx">styles</span><span class="p">.</span><span class="nx">container</span><span class="p">}</span><span class="o">&gt;</span>
+        <span class="o">&lt;</span><span class="nx">Text</span> <span class="nx">style</span><span class="o">=</span><span class="p">{</span><span class="nx">styles</span><span class="p">.</span><span class="nx">welcome</span><span class="p">}</span><span class="o">&gt;</span>
+          <span class="nx">Hello</span> <span class="nx">World</span><span class="o">!</span>
+        <span class="o">&lt;</span><span class="sr">/Text&gt;</span><span class="err">
+</span>        <span class="o">&lt;</span><span class="nx">Text</span> <span class="nx">style</span><span class="o">=</span><span class="p">{</span><span class="nx">styles</span><span class="p">.</span><span class="nx">instructions</span><span class="p">}</span><span class="o">&gt;</span>
+          <span class="nx">This</span> <span class="nx">is</span> <span class="nx">my</span> <span class="nx">first</span> <span class="nx">React</span> <span class="nx">Native</span> <span class="nx">app</span><span class="p">.</span>
+        <span class="o">&lt;</span><span class="sr">/Text&gt;</span><span class="err">
+</span>      <span class="o">&lt;</span><span class="sr">/View&gt;</span><span class="err">
+</span>    <span class="p">);</span>
+  <span class="p">}</span></code></pre></figure>
+
+<p>And see the result:
+<img src="/public/2016/03/hello-world-edited.jpg" alt="Hello World Edited Code" />
+Okay. That’s your fist simple app.</p>
+
+<h2 id="conclusion">Conclusion</h2>
+<p>We have just taken a look with React Native. You should feel yourself about it. Is it really simple? And we have many things to do with it. We can also learn more React Native by its samples <a href="https://github.com/facebook/react-native" target="_blank">from GitHub</a>.
+See you next time!</p>
+
+  </div>
+  
+</div>
+
+<div class="pagination">
+  
+    <span class="pagination-item newer">Newer</span>
+  
+  
+    <a class="pagination-item older" href="/page2">Older</a>
+  
+</div>
+
+
+      </div>
+    </div>
+
+    <label for="sidebar-checkbox" class="sidebar-toggle"></label>
+
+    <script>
+      (function(document) {
+        var toggle = document.querySelector('.sidebar-toggle');
+        var sidebar = document.querySelector('#sidebar');
+        var checkbox = document.querySelector('#sidebar-checkbox');
+
+        document.addEventListener('click', function(e) {
+          var target = e.target;
+
+          if(!checkbox.checked ||
+             sidebar.contains(target) ||
+             (target === checkbox || target === toggle)) return;
+
+          checkbox.checked = false;
+        }, false);
+      })(document);
+    </script>
+  </body>
+</html>
